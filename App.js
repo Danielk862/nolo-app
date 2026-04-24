@@ -11,6 +11,12 @@ import HomeScreen from './screens/HomeScreen';
 import FinanzasPersonalesScreen from './screens/FinanzasPersonalesScreen';
 import FinanzasParejaScreen from './screens/FinanzasParejaScreen';
 import SimuladoresScreen from './screens/SimuladoresScreen';
+import CDTScreen from './screens/CDTScreen';
+import DeudaBancoScreen from './screens/DeudaBancoScreen';
+import FondoEmergenciaScreen from './screens/FondoEmergenciaScreen';
+import AhorroScreen from './screens/AhorroScreen';
+import PlanPensionScreen from './screens/PlanPensionScreen';
+import PrestamosScreen from './screens/PrestamosScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,7 +60,13 @@ export default function App() {
         <Stack.Screen name="Home"               component={HomeScreen} />
         <Stack.Screen name="FinanzasPersonales" component={FinanzasPersonalesScreen} />
         <Stack.Screen name="FinanzasPareja"     component={FinanzasParejaScreen} />
-        <Stack.Screen name="Simuladores"        component={SimuladoresScreen} />
+        <Stack.Screen name="Simuladores"          component={SimuladoresScreen} />
+        <Stack.Screen name="SimuladorCDT"         component={CDTScreen} />
+        <Stack.Screen name="SimuladorDeuda"       component={DeudaBancoScreen} />
+        <Stack.Screen name="SimuladorEmergencia"  component={FondoEmergenciaScreen} />
+        <Stack.Screen name="SimuladorAhorro"      component={AhorroScreen} />
+        <Stack.Screen name="SimuladorPension"     component={PlanPensionScreen} />
+        <Stack.Screen name="SimuladorPrestamos"   component={PrestamosScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
