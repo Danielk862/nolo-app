@@ -6,6 +6,7 @@ import {
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import BottomNav from '../components/BottomNav';
+import LogoutButton from '../components/LogoutButton';
 import MonthSelector from '../components/MonthSelector';
 import PieChart from '../components/PieChart';
 
@@ -104,6 +105,7 @@ export default function FinanzasParejaScreen({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerEmoji}>💑</Text>
         <Text style={styles.headerTitle}>Finanzas en pareja</Text>
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
       </View>
 
       <View style={styles.tabs}>
@@ -263,9 +265,7 @@ export default function FinanzasParejaScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate('Home')}
-        onSimuladores={() => navigation.navigate('Simuladores')}
-        onMenu={() => navigation.navigate('Home')}
+        onInicio={() => navigation.navigate('Simuladores')}
         accentColor={COLORS.primaryYellow}
       />
 
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.sm,
   },
   headerEmoji: { fontSize: 28 },
-  headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
+  headerTitle: { flex: 1, fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: SPACING.md,

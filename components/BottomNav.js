@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
-export default function BottomNav({ onInicio, onSimuladores, onMenu, accentColor = COLORS.darkGreen }) {
+export default function BottomNav({ onInicio, accentColor = COLORS.darkGreen }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -11,17 +11,8 @@ export default function BottomNav({ onInicio, onSimuladores, onMenu, accentColor
       >
         <Text style={styles.btnText}>Inicio</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, { backgroundColor: accentColor }]}
-        onPress={onSimuladores}
-      >
-        <Text style={styles.btnText}>Simuladores</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, { backgroundColor: accentColor }]}
-        onPress={onMenu}
-      >
-        <Text style={styles.btnText}>Menú  ☰</Text>
+      <TouchableOpacity style={[styles.btn, { backgroundColor: accentColor }]}>
+        <Text style={styles.btnText}>Cursos y libros</Text>
       </TouchableOpacity>
     </View>
   );

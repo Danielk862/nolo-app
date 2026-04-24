@@ -7,6 +7,7 @@ import {
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import BottomNav from '../components/BottomNav';
+import LogoutButton from '../components/LogoutButton';
 import MonthSelector from '../components/MonthSelector';
 import PieChart from '../components/PieChart';
 
@@ -117,6 +118,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
       <View style={styles.header}>
         <Text style={styles.headerEmoji}>💰</Text>
         <Text style={styles.headerTitle}>Finanzas Personales</Text>
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
       </View>
 
       {/* Tabs */}
@@ -287,9 +289,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate('Home')}
-        onSimuladores={() => navigation.navigate('Simuladores')}
-        onMenu={() => navigation.navigate('Home')}
+        onInicio={() => navigation.navigate('Simuladores')}
         accentColor={COLORS.darkGreen}
       />
 
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   headerEmoji: { fontSize: 28 },
-  headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.darkGray },
+  headerTitle: { flex: 1, fontSize: 22, fontWeight: '700', color: COLORS.darkGray },
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: SPACING.md,

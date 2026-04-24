@@ -1,28 +1,22 @@
-import { useState } from 'react';
 import {
   View, Text, TouchableOpacity,
-  StyleSheet, Linking, ActivityIndicator,
+  StyleSheet, Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
-import { supabase } from '../lib/supabase';
+import LogoutButton from '../components/LogoutButton';
 
 export default function WelcomeScreen({ navigation }) {
-  const [signingOut, setSigningOut] = useState(false);
-
   const handleTutorial = () => {
     Linking.openURL('https://www.youtube.com');
   };
 
-  const handleSignOut = async () => {
-    setSigningOut(true);
-    await supabase.auth.signOut();
-    navigation.replace('Login');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.topBar}>
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={26} />
+      </View>
       <View style={styles.inner}>
         <Text style={styles.welcome}>Bienvenid@ a</Text>
 
@@ -43,21 +37,11 @@ export default function WelcomeScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueBtn}
-          onPress={() => navigation.replace('Home')}
+          onPress={() => navigation.replace('Simuladores')}
         >
           <Text style={styles.continueBtnText}>Continuar →</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.signOutBtn}
-          onPress={handleSignOut}
-          disabled={signingOut}
-        >
-          {signingOut
-            ? <ActivityIndicator size="small" color={COLORS.darkGray} />
-            : <Text style={styles.signOutText}>← Cerrar sesión</Text>
-          }
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -67,6 +51,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.backgroundGreen,
+  },
+  topBar: {
+    alignItems: 'flex-end',
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.xs,
   },
   inner: {
     flex: 1,
@@ -129,17 +118,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '600',
-  },
-  signOutBtn: {
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    minHeight: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  signOutText: {
-    color: COLORS.darkGray,
-    fontSize: 14,
-    textDecorationLine: 'underline',
   },
 });

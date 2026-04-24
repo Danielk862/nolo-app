@@ -1,10 +1,11 @@
-import React from 'react';
 import {
   View, Text, TouchableOpacity,
-  StyleSheet, SafeAreaView, ScrollView
+  StyleSheet, ScrollView
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
+import LogoutButton from '../components/LogoutButton';
 
 const MODULE_CARDS = [
   {
@@ -23,19 +24,14 @@ const MODULE_CARDS = [
     bg: '#FFF0C8',
     accent: COLORS.primaryYellow,
   },
-  {
-    id: 'negocio',
-    emoji: '🏢',
-    label: 'Mi negocio',
-    route: 'Simuladores',
-    bg: '#E8E8F8',
-    accent: '#5A5ABB',
-  },
 ];
 
 export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.topBar}>
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={26} />
+      </View>
       <ScrollView contentContainerStyle={styles.inner}>
         {MODULE_CARDS.map((card) => (
           <TouchableOpacity
@@ -54,6 +50,21 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.byline}>by la Peliroja Financiera</Text>
         </View>
       </ScrollView>
+
+      <View style={styles.bottomNav}>
+        <TouchableOpacity
+          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+          onPress={() => navigation.navigate('Simuladores')}
+        >
+          <Text style={styles.navText}>Inicio</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+          onPress={() => navigation.navigate('Simuladores')}
+        >
+          <Text style={styles.navText}>Cursos y libros</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -62,6 +73,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.backgroundGreen,
+  },
+  topBar: {
+    alignItems: 'flex-end',
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.xs,
   },
   inner: {
     flex: 1,
@@ -99,5 +115,25 @@ const styles = StyleSheet.create({
   byline: {
     color: COLORS.gray,
     fontSize: 14,
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.white,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.lightGray,
+  },
+  navBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: RADIUS.full,
+    alignItems: 'center',
+  },
+  navText: {
+    color: COLORS.white,
+    fontWeight: '600',
+    fontSize: 13,
   },
 });

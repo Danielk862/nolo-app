@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
+import LogoutButton from '../components/LogoutButton';
 
 const SIMULATORS = [
   { id: 'cdt', label: 'CDT', emoji: '🏦', description: 'Simula el rendimiento de un Certificado de Depósito a Término' },
@@ -247,17 +248,27 @@ export default function SimuladoresScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => activeSimulator ? setActiveSimulator(null) : navigation.navigate('Home')}>
-          <Text style={styles.back}>← </Text>
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>
-          {activeSimulator ? SIMULATORS.find(s => s.id === activeSimulator)?.label : 'Simuladores'}
+          {activeSimulator ? SIMULATORS.find(s => s.id === activeSimulator)?.label : 'Menú'}
         </Text>
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
       </View>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         {!activeSimulator ? (
           <>
+            <TouchableOpacity
+              style={styles.simCard}
+              onPress={() => navigation.navigate('Home')}
+            >
+              <Text style={styles.simEmoji}>💰</Text>
+              <View style={styles.simInfo}>
+                <Text style={styles.simLabel}>Finanzas</Text>
+                <Text style={styles.simDesc}>Ver Finanzas Personales y en Pareja</Text>
+              </View>
+              <Text style={styles.arrow}>›</Text>
+            </TouchableOpacity>
+
             {SIMULATORS.map(sim => (
               <TouchableOpacity
                 key={sim.id}
@@ -288,18 +299,12 @@ export default function SimuladoresScreen({ navigation }) {
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => { setActiveSimulator(null); navigation.navigate('Simuladores'); }}
         >
           <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}>
           <Text style={styles.navText}>Cursos y libros</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Text style={styles.navText}>Menú ☰</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -317,8 +322,7 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.lightGray,
     gap: SPACING.sm,
   },
-  back: { fontSize: 22, color: COLORS.darkGreen, fontWeight: '700' },
-  headerTitle: { fontSize: 22, fontWeight: '700', color: COLORS.darkGray },
+  headerTitle: { flex: 1, fontSize: 22, fontWeight: '700', color: COLORS.darkGray },
   scroll: { flex: 1 },
   scrollContent: { padding: SPACING.md, gap: SPACING.md },
   simCard: {
