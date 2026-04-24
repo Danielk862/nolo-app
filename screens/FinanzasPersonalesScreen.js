@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView, TextInput, Modal,
-  Alert
+  StyleSheet, TextInput, Modal,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import BottomNav from '../components/BottomNav';
@@ -76,6 +76,11 @@ export default function FinanzasPersonalesScreen({ navigation }) {
   ].filter(d => d.value > 0);
 
   const fmt = (v) => `$${v.toLocaleString('es-CO')} COP`;
+  const formatMoney = (raw) => {
+    const digits = raw.replace(/[^0-9]/g, '');
+    if (!digits) return '';
+    return parseInt(digits, 10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
 
   const openEdit = (cat, type) => {
     setEditCategory({ ...cat, type });
@@ -305,8 +310,8 @@ export default function FinanzasPersonalesScreen({ navigation }) {
             </Text>
             <TextInput
               style={styles.modalInput}
-              value={editValue}
-              onChangeText={setEditValue}
+              value={formatMoney(editValue)}
+              onChangeText={(text) => setEditValue(text.replace(/[^0-9]/g, ''))}
               keyboardType="numeric"
               placeholder="0"
               autoFocus
@@ -339,9 +344,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
+    paddingVertical: SPACING.md,
     backgroundColor: COLORS.white,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGray,
   },
   headerEmoji: { fontSize: 28 },
   headerTitle: { flex: 1, fontSize: 22, fontWeight: '700', color: COLORS.darkGray },
@@ -349,6 +355,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: SPACING.md,
     gap: SPACING.xs,
+    marginTop: SPACING.sm,
     marginBottom: SPACING.xs,
   },
   tab: {
