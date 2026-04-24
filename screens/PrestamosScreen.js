@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, SPACING } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
 import NoloLogo from '../components/NoloLogo';
 
@@ -36,7 +36,7 @@ export default function PrestamosScreen({ navigation }) {
           Calcula cuotas y el total a pagar en un préstamo.
         </Text>
 
-        <SimInput label="Monto del préstamo (COP)" value={monto} onChange={setMonto} />
+        <SimInput label="Monto del préstamo (COP)" value={monto} onChange={setMonto} money />
         <SimInput label="Tasa EA (%)" value={rate} onChange={setRate} />
         <SimInput label="Número de cuotas" value={cuotas} onChange={setCuotas} />
 

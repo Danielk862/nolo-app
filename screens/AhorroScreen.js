@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, SPACING } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
 import NoloLogo from '../components/NoloLogo';
 
@@ -36,7 +36,7 @@ export default function AhorroScreen({ navigation }) {
           Proyecta el crecimiento de tus ahorros en el tiempo.
         </Text>
 
-        <SimInput label="Ahorro mensual (COP)" value={ahorro} onChange={setAhorro} />
+        <SimInput label="Ahorro mensual (COP)" value={ahorro} onChange={setAhorro} money />
         <SimInput label="Tasa anual (%)" value={rate} onChange={setRate} />
         <SimInput label="Años de ahorro" value={anos} onChange={setAnos} />
 

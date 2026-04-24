@@ -172,9 +172,6 @@ export default function LoginScreen({ navigation, route }) {
               autoCapitalize="none"
               autoCorrect={false}
             />
-            <TouchableOpacity style={styles.arrowBtn} onPress={handleLogin}>
-              <Text style={styles.arrowText}>»</Text>
-            </TouchableOpacity>
           </View>
           {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
         </View>
@@ -196,9 +193,6 @@ export default function LoginScreen({ navigation, route }) {
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <EyeIcon open={showPass} color={COLORS.darkGreen} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.arrowBtn} onPress={handleLogin}>
-              <Text style={styles.arrowText}>»</Text>
             </TouchableOpacity>
           </View>
           {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}

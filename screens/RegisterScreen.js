@@ -2,58 +2,117 @@ import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, ActivityIndicator, Platform,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 
-const DOC_TYPES = ['CC', 'CE', 'PA', 'TI'];
+const DOC_TYPES = [
+  { value: 'CC', label: 'CC – Cédula de Ciudadanía' },
+  { value: 'CE', label: 'CE – Cédula de Extranjería' },
+  { value: 'PA', label: 'PA – Pasaporte' },
+  { value: 'TI', label: 'TI – Tarjeta de Identidad' },
+];
 const GENDERS = [
-  { value: 'Masculino', label: 'M' },
-  { value: 'Femenino', label: 'F' },
-  { value: 'No binario', label: 'NB' },
-  { value: 'Prefiero no decir', label: 'N/D' },
+  { value: 'Masculino', label: 'Masculino' },
+  { value: 'Femenino', label: 'Femenino' },
+  { value: 'No binario', label: 'No binario' },
+  { value: 'Prefiero no decir', label: 'Prefiero no decir' },
 ];
 
-function ChipSelector({ options, selected, onSelect, valueKey, labelKey }) {
+function Dropdown({ options, value, onSelect, error, placeholder, title }) {
+  const [open, setOpen] = useState(false);
+  const selected = options.find(o => o.value === value);
+
   return (
-    <View style={chipStyles.row}>
-      {options.map((opt) => {
-        const val = valueKey ? opt[valueKey] : opt;
-        const lbl = labelKey ? opt[labelKey] : opt;
-        const active = selected === val;
-        return (
-          <TouchableOpacity
-            key={val}
-            style={[chipStyles.chip, active && chipStyles.chipActive]}
-            onPress={() => onSelect(val)}
-          >
-            <Text style={[chipStyles.chipText, active && chipStyles.chipTextActive]}>
-              {lbl}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+    <>
+      <TouchableOpacity
+        style={[dropStyles.btn, error && dropStyles.btnError]}
+        onPress={() => setOpen(true)}
+        activeOpacity={0.8}
+      >
+        <Text style={[dropStyles.btnText, !selected && dropStyles.placeholder]}>
+          {selected ? selected.label : placeholder}
+        </Text>
+        <Text style={dropStyles.arrow}>▾</Text>
+      </TouchableOpacity>
+
+      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+        <TouchableOpacity style={dropStyles.overlay} activeOpacity={1} onPress={() => setOpen(false)}>
+          <View style={dropStyles.sheet}>
+            <Text style={dropStyles.sheetTitle}>{title}</Text>
+            {options.map(opt => (
+              <TouchableOpacity
+                key={opt.value}
+                style={[dropStyles.option, value === opt.value && dropStyles.optionActive]}
+                onPress={() => { onSelect(opt.value); setOpen(false); }}
+              >
+                <Text style={[dropStyles.optionText, value === opt.value && dropStyles.optionTextActive]}>
+                  {opt.label}
+                </Text>
+                {value === opt.value && <Text style={dropStyles.check}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </>
   );
 }
 
-const chipStyles = StyleSheet.create({
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    borderRadius: RADIUS.full,
-    borderWidth: 2,
-    borderColor: COLORS.darkGreen,
-    backgroundColor: COLORS.primaryGreen,
+const dropStyles = StyleSheet.create({
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: COLORS.lightGray,
+    borderRadius: RADIUS.md,
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryGreen,
+    paddingHorizontal: SPACING.md,
+    height: 48,
   },
-  chipActive: { backgroundColor: COLORS.darkGreen },
-  chipText: { color: COLORS.darkGray, fontSize: 13, fontWeight: '600' },
-  chipTextActive: { color: COLORS.white },
+  btnError: { borderColor: COLORS.red },
+  btnText: { fontSize: 15, color: COLORS.darkGray, flex: 1 },
+  placeholder: { color: COLORS.gray },
+  arrow: { fontSize: 16, color: COLORS.darkGray, marginLeft: SPACING.xs },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: SPACING.xl,
+  },
+  sheet: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
+    width: '100%',
+    overflow: 'hidden',
+  },
+  sheetTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: COLORS.darkGreen,
+    padding: SPACING.md,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGray,
+  },
+  option: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: SPACING.md,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGray,
+  },
+  optionActive: { backgroundColor: '#F0FFF0' },
+  optionText: { fontSize: 15, color: COLORS.darkGray },
+  optionTextActive: { color: COLORS.darkGreen, fontWeight: '600' },
+  check: { color: COLORS.darkGreen, fontSize: 16, fontWeight: '700' },
 });
+
 
 function Field({ label, required, error, children }) {
   return (
@@ -283,10 +342,13 @@ export default function RegisterScreen({ navigation }) {
             <Text style={styles.sectionTitle}>Información personal</Text>
 
             <Field label="Tipo de documento" required error={errors.documentType}>
-              <ChipSelector
+              <Dropdown
                 options={DOC_TYPES}
-                selected={form.documentType}
-                onSelect={(v) => { set('documentType')(v); }}
+                value={form.documentType}
+                onSelect={set('documentType')}
+                error={errors.documentType}
+                placeholder="Selecciona un tipo"
+                title="Tipo de documento"
               />
             </Field>
 
@@ -395,12 +457,13 @@ export default function RegisterScreen({ navigation }) {
             </Field>
 
             <Field label="Género" error={errors.gender}>
-              <ChipSelector
+              <Dropdown
                 options={GENDERS}
-                selected={form.gender}
+                value={form.gender}
                 onSelect={set('gender')}
-                valueKey="value"
-                labelKey="label"
+                error={errors.gender}
+                placeholder="Selecciona un género"
+                title="Género"
               />
             </Field>
 

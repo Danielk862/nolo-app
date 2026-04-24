@@ -1,14 +1,28 @@
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { COLORS, SPACING, RADIUS } from '../constants/theme';
 
-export function SimInput({ label, value, onChange }) {
+function formatMoney(raw) {
+  const digits = raw.replace(/[^0-9]/g, '');
+  if (!digits) return '';
+  return parseInt(digits, 10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+export function SimInput({ label, value, onChange, money = false }) {
+  const handleChange = (text) => {
+    if (money) {
+      onChange(text.replace(/[^0-9]/g, ''));
+    } else {
+      onChange(text);
+    }
+  };
+
   return (
     <View style={simStyles.inputGroup}>
       <Text style={simStyles.inputLabel}>{label}</Text>
       <TextInput
         style={simStyles.input}
-        value={value}
-        onChangeText={onChange}
+        value={money ? formatMoney(value) : value}
+        onChangeText={handleChange}
         keyboardType="numeric"
         placeholder="0"
         placeholderTextColor={COLORS.gray}

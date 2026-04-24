@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, SPACING } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
 import NoloLogo from '../components/NoloLogo';
 
@@ -26,7 +26,7 @@ export default function FondoEmergenciaScreen({ navigation }) {
           Calcula cuánto necesitas en tu fondo de emergencia.
         </Text>
 
-        <SimInput label="Gastos mensuales (COP)" value={gasto} onChange={setGasto} />
+        <SimInput label="Gastos mensuales (COP)" value={gasto} onChange={setGasto} money />
         <SimInput label="Meses de cobertura" value={meses} onChange={setMeses} />
 
         {fondo > 0 && (

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS, SPACING } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
 import NoloLogo from '../components/NoloLogo';
 
@@ -36,7 +36,7 @@ export default function DeudaBancoScreen({ navigation }) {
           Calcula el costo real de tu deuda bancaria.
         </Text>
 
-        <SimInput label="Monto de deuda (COP)" value={deuda} onChange={setDeuda} />
+        <SimInput label="Monto de deuda (COP)" value={deuda} onChange={setDeuda} money />
         <SimInput label="Tasa EA (%)" value={rate} onChange={setRate} />
         <SimInput label="Número de cuotas" value={cuotas} onChange={setCuotas} />
 
