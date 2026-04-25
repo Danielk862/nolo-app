@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   ActivityIndicator, Platform,
-  KeyboardAvoidingView, Modal,
+  KeyboardAvoidingView, Modal, FlatList,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
+import { GeoModel } from '../models';
 import styles, { dropStyles, fieldStyles } from '../styles/screens/RegisterScreen.styles';
 
 const DOC_TYPES = [
@@ -23,39 +25,66 @@ const GENDERS = [
   { value: 'Prefiero no decir', label: 'Prefiero no decir' },
 ];
 
-function Dropdown({ options, value, onSelect, error, placeholder, title }) {
+function Dropdown({ options, value, onSelect, error, placeholder, title, disabled, loading }) {
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
   const selected = options.find(o => o.value === value);
+  const filtered = search
+    ? options.filter(o => o.label.toLowerCase().includes(search.toLowerCase()))
+    : options;
+
+  const handleOpen = () => {
+    if (disabled || loading) return;
+    setSearch('');
+    setOpen(true);
+  };
 
   return (
     <>
       <TouchableOpacity
-        style={[dropStyles.btn, error && dropStyles.btnError]}
-        onPress={() => setOpen(true)}
-        activeOpacity={0.8}
+        style={[dropStyles.btn, error && dropStyles.btnError, (disabled || loading) && dropStyles.btnDisabled]}
+        onPress={handleOpen}
+        activeOpacity={disabled || loading ? 1 : 0.8}
       >
-        <Text style={[dropStyles.btnText, !selected && dropStyles.placeholder]}>
-          {selected ? selected.label : placeholder}
+        <Text style={[dropStyles.btnText, (!selected || disabled) && dropStyles.placeholder]}>
+          {loading ? 'Cargando...' : (selected ? selected.label : placeholder)}
         </Text>
-        <Text style={dropStyles.arrow}>▾</Text>
+        {loading
+          ? <ActivityIndicator size="small" color={COLORS.gray} />
+          : <Text style={[dropStyles.arrow, disabled && dropStyles.arrowDisabled]}>▾</Text>
+        }
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
         <TouchableOpacity style={dropStyles.overlay} activeOpacity={1} onPress={() => setOpen(false)}>
-          <View style={dropStyles.sheet}>
+          <View style={dropStyles.sheet} onStartShouldSetResponder={() => true}>
             <Text style={dropStyles.sheetTitle}>{title}</Text>
-            {options.map(opt => (
-              <TouchableOpacity
-                key={opt.value}
-                style={[dropStyles.option, value === opt.value && dropStyles.optionActive]}
-                onPress={() => { onSelect(opt.value); setOpen(false); }}
-              >
-                <Text style={[dropStyles.optionText, value === opt.value && dropStyles.optionTextActive]}>
-                  {opt.label}
-                </Text>
-                {value === opt.value && <Text style={dropStyles.check}>✓</Text>}
-              </TouchableOpacity>
-            ))}
+            {options.length > 8 && (
+              <TextInput
+                style={dropStyles.searchInput}
+                placeholder="Buscar..."
+                placeholderTextColor={COLORS.gray}
+                value={search}
+                onChangeText={setSearch}
+              />
+            )}
+            <FlatList
+              data={filtered}
+              keyExtractor={item => item.value}
+              style={{ maxHeight: 320 }}
+              keyboardShouldPersistTaps="handled"
+              renderItem={({ item: opt }) => (
+                <TouchableOpacity
+                  style={[dropStyles.option, value === opt.value && dropStyles.optionActive]}
+                  onPress={() => { onSelect(opt.value); setOpen(false); }}
+                >
+                  <Text style={[dropStyles.optionText, value === opt.value && dropStyles.optionTextActive]}>
+                    {opt.label}
+                  </Text>
+                  {value === opt.value && <Text style={dropStyles.check}>✓</Text>}
+                </TouchableOpacity>
+              )}
+            />
           </View>
         </TouchableOpacity>
       </Modal>
@@ -101,6 +130,55 @@ export default function RegisterScreen({ navigation }) {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [countries, setCountries] = useState([]);
+  const [geoStates, setGeoStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dateValue, setDateValue] = useState(new Date(2000, 0, 1));
+
+  useEffect(() => {
+    GeoModel.getCountries()
+      .then(data => {
+        setCountries(data ?? []);
+      })
+      .catch(err => console.error('[GEO] Error países:', err.message, err.code));
+  }, []);
+
+  useEffect(() => {
+    setGeoStates([]);
+    setCities([]);
+    if (!form.country) return;
+    const country = countries.find(c => c.name === form.country);
+    if (!country) return;
+    setLoadingStates(true);
+    GeoModel.getStatesByCountry(country.id)
+      .then(data => { setGeoStates(data); setLoadingStates(false); })
+      .catch(err => { console.error('Error cargando estados:', err.message); setLoadingStates(false); });
+  }, [form.country, countries]);
+
+  useEffect(() => {
+    setCities([]);
+    if (!form.state) return;
+    const st = geoStates.find(s => s.name === form.state);
+    if (!st) return;
+    setLoadingCities(true);
+    GeoModel.getCitiesByState(st.id)
+      .then(data => { setCities(data); setLoadingCities(false); })
+      .catch(err => { console.error('Error cargando ciudades:', err.message); setLoadingCities(false); });
+  }, [form.state, geoStates]);
+
+  const handleCountrySelect = (name) => {
+    setForm(prev => ({ ...prev, country: name, state: '', city: '' }));
+    setErrors(prev => ({ ...prev, country: null, state: null, city: null, general: null }));
+  };
+
+  const handleStateSelect = (name) => {
+    setForm(prev => ({ ...prev, state: name, city: '' }));
+    setErrors(prev => ({ ...prev, state: null, city: null, general: null }));
+  };
+
   const set = (field) => (value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: null, general: null }));
@@ -125,10 +203,6 @@ export default function RegisterScreen({ navigation }) {
     if (!form.documentNumber.trim()) e.documentNumber = 'Requerido';
     if (!form.firstName.trim()) e.firstName = 'Requerido';
     if (!form.lastName.trim()) e.lastName = 'Requerido';
-
-    if (form.birthDate && !/^\d{4}-\d{2}-\d{2}$/.test(form.birthDate)) {
-      e.birthDate = 'Formato: AAAA-MM-DD';
-    }
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -231,7 +305,7 @@ export default function RegisterScreen({ navigation }) {
               <View style={[styles.inputRow, errors.username && styles.inputRowError]}>
                 <TextInput
                   style={styles.input}
-                  placeholder="ej: juan_perez"
+                  placeholder="ej: jperez"
                   placeholderTextColor={COLORS.gray}
                   value={form.username}
                   onChangeText={set('username')}
@@ -378,7 +452,7 @@ export default function RegisterScreen({ navigation }) {
               <View style={styles.inputRow}>
                 <TextInput
                   style={styles.input}
-                  placeholder="+57 300 000 0000"
+                  placeholder="+57 310 548 8700"
                   placeholderTextColor={COLORS.gray}
                   value={form.phone}
                   onChangeText={set('phone')}
@@ -388,17 +462,35 @@ export default function RegisterScreen({ navigation }) {
             </Field>
 
             <Field label="Fecha de nacimiento" error={errors.birthDate}>
-              <View style={[styles.inputRow, errors.birthDate && styles.inputRowError]}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="AAAA-MM-DD"
-                  placeholderTextColor={COLORS.gray}
-                  value={form.birthDate}
-                  onChangeText={set('birthDate')}
-                  keyboardType="number-pad"
-                  maxLength={10}
+              <TouchableOpacity
+                style={[styles.inputRow, errors.birthDate && styles.inputRowError]}
+                onPress={() => setShowDatePicker(true)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.input, !form.birthDate && { color: COLORS.gray }]}>
+                  {form.birthDate || 'Selecciona una fecha'}
+                </Text>
+                <Text style={{ fontSize: 18, color: COLORS.darkGray }}>📅</Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={dateValue}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  maximumDate={new Date()}
+                  minimumDate={new Date(1900, 0, 1)}
+                  onChange={(_, selected) => {
+                    setShowDatePicker(Platform.OS === 'ios');
+                    if (selected) {
+                      setDateValue(selected);
+                      const y = selected.getFullYear();
+                      const m = String(selected.getMonth() + 1).padStart(2, '0');
+                      const d = String(selected.getDate()).padStart(2, '0');
+                      set('birthDate')(`${y}-${m}-${d}`);
+                    }
+                  }}
                 />
-              </View>
+              )}
             </Field>
 
             <Field label="Género" error={errors.gender}>
@@ -412,45 +504,41 @@ export default function RegisterScreen({ navigation }) {
               />
             </Field>
 
-            <View style={styles.row2}>
-              <View style={{ flex: 1 }}>
-                <Field label="País" error={errors.country}>
-                  <View style={styles.inputRow}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="País"
-                      placeholderTextColor={COLORS.gray}
-                      value={form.country}
-                      onChangeText={set('country')}
-                    />
-                  </View>
-                </Field>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Field label="Departamento" error={errors.state}>
-                  <View style={styles.inputRow}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Dpto/Estado"
-                      placeholderTextColor={COLORS.gray}
-                      value={form.state}
-                      onChangeText={set('state')}
-                    />
-                  </View>
-                </Field>
-              </View>
-            </View>
+            <Field label="País" error={errors.country}>
+              <Dropdown
+                options={countries.map(c => ({ value: c.name, label: c.name }))}
+                value={form.country}
+                onSelect={handleCountrySelect}
+                error={errors.country}
+                placeholder="Selecciona un país"
+                title="País"
+              />
+            </Field>
+
+            <Field label="Departamento / Estado" error={errors.state}>
+              <Dropdown
+                options={geoStates.map(s => ({ value: s.name, label: s.name }))}
+                value={form.state}
+                onSelect={handleStateSelect}
+                error={errors.state}
+                placeholder={'Selecciona un departamento'}
+                title="Departamento / Estado"
+                disabled={!form.country}
+                loading={loadingStates}
+              />
+            </Field>
 
             <Field label="Ciudad" error={errors.city}>
-              <View style={styles.inputRow}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Ciudad"
-                  placeholderTextColor={COLORS.gray}
-                  value={form.city}
-                  onChangeText={set('city')}
-                />
-              </View>
+              <Dropdown
+                options={cities.map(c => ({ value: c.name, label: c.name }))}
+                value={form.city}
+                onSelect={set('city')}
+                error={errors.city}
+                placeholder={'Selecciona una ciudad'}
+                title="Ciudad"
+                disabled={!form.state}
+                loading={loadingCities}
+              />
             </Field>
           </View>
 

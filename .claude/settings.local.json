@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node populate_geo_data.js)",
+      "Bash(xargs grep *)"
+    ]
+  }
+}
