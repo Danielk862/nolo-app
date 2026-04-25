@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { supabase } from '../lib/supabase';
+import styles from '../styles/components/LogoutButton.styles';
 
 export default function LogoutButton({ navigation, color = '#555555', size = 24, style }) {
   const [loading, setLoading] = useState(false);
@@ -50,8 +51,3 @@ export default function LogoutButton({ navigation, color = '#555555', size = 24,
   );
 }
 
-const styles = StyleSheet.create({
-  btn: {
-    padding: 6,
-  },
-});

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING } from '../constants/theme';
+import { COLORS } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
 import NoloLogo from '../components/NoloLogo';
+import styles from '../styles/screens/simulador.styles';
 
 export default function DeudaBancoScreen({ navigation }) {
   const [deuda, setDeuda] = useState('5000000');
@@ -55,20 +56,3 @@ export default function DeudaBancoScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.white },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGray,
-  },
-  backBtn: { width: 40, alignItems: 'center' },
-  backArrow: { fontSize: 32, color: COLORS.darkGreen, lineHeight: 36 },
-  headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
-  content: { padding: SPACING.md, gap: SPACING.md },
-  description: { fontSize: 14, color: COLORS.gray, marginBottom: SPACING.xs },
-});

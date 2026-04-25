@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { View, TouchableOpacity, Text } from 'react-native';
+import { COLORS } from '../constants/theme';
+import styles from '../styles/components/MonthSelector.styles';
 
 const MONTHS = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -32,24 +33,3 @@ export default function MonthSelector({ selected, onSelect, accentColor = COLORS
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  monthGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: SPACING.xs,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-  },
-  monthBtn: {
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: 8,
-    borderRadius: RADIUS.full,
-    minWidth: 90,
-    alignItems: 'center',
-  },
-  monthText: {
-    fontSize: 13,
-    fontWeight: '500',
-  },
-});

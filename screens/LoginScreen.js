@@ -1,15 +1,16 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, KeyboardAvoidingView, Animated,
+  KeyboardAvoidingView, Animated,
   Platform, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import Svg, { Path, Circle } from 'react-native-svg';
-import { COLORS, SPACING, RADIUS } from '../constants/theme';
+import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
+import styles from '../styles/screens/LoginScreen.styles';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
   if (open) {
@@ -230,145 +231,3 @@ export default function LoginScreen({ navigation, route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundGreen,
-  },
-  toast: {
-    position: 'absolute',
-    top: 16,
-    left: SPACING.xl,
-    right: SPACING.xl,
-    backgroundColor: COLORS.darkGreen,
-    borderRadius: RADIUS.md,
-    paddingVertical: 12,
-    paddingHorizontal: SPACING.md,
-    zIndex: 100,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 10,
-  },
-  toastText: {
-    color: COLORS.white,
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  inner: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: SPACING.xl,
-    gap: SPACING.md,
-  },
-  avatarContainer: {
-    marginBottom: SPACING.lg,
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: COLORS.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  avatarEmoji: {
-    fontSize: 60,
-  },
-  fieldBlock: {
-    width: '100%',
-    gap: 4,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.primaryGreen,
-    borderRadius: RADIUS.full,
-    borderWidth: 2,
-    borderColor: COLORS.darkGreen,
-    paddingLeft: SPACING.lg,
-    height: 56,
-  },
-  inputRowError: {
-    borderColor: COLORS.red,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: COLORS.darkGray,
-  },
-  eyeBtn: {
-    paddingHorizontal: SPACING.sm,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  arrowBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: COLORS.darkGreen,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 4,
-  },
-  arrowText: {
-    color: COLORS.white,
-    fontSize: 20,
-    fontWeight: '700',
-    marginTop: -2,
-  },
-  errorText: {
-    color: COLORS.red,
-    fontSize: 12,
-    marginLeft: SPACING.lg,
-  },
-  alertBox: {
-    width: '100%',
-    backgroundColor: '#FDE8E8',
-    borderRadius: RADIUS.md,
-    padding: SPACING.md,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.red,
-  },
-  alertText: {
-    color: COLORS.red,
-    fontSize: 13,
-  },
-  loginBtn: {
-    backgroundColor: COLORS.darkGreen,
-    paddingVertical: 14,
-    paddingHorizontal: SPACING.xxl,
-    borderRadius: RADIUS.full,
-    marginTop: SPACING.sm,
-    minWidth: 160,
-    alignItems: 'center',
-  },
-  loginBtnDisabled: {
-    opacity: 0.7,
-  },
-  loginBtnText: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  registerLink: {
-    color: COLORS.darkGray,
-    fontSize: 14,
-  },
-  registerLinkBold: {
-    fontWeight: '700',
-    color: COLORS.darkGreen,
-    textDecorationLine: 'underline',
-  },
-  logoContainer: {
-    marginTop: SPACING.xl,
-  },
-});
