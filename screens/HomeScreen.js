@@ -6,13 +6,14 @@ import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/screens/HomeScreen.styles';
+import { ROUTES } from '../constants/routes';
 
 const MODULE_CARDS = [
   {
     id: 'personal',
     emoji: '💰',
     label: 'Finanzas Personales',
-    route: 'FinanzasPersonales',
+    route: ROUTES.FINANZAS_PERSONALES,
     bg: '#E8F8D0',
     accent: COLORS.darkGreen,
   },
@@ -20,7 +21,7 @@ const MODULE_CARDS = [
     id: 'pareja',
     emoji: '💑',
     label: 'Finanzas en pareja',
-    route: 'FinanzasPareja',
+    route: ROUTES.FINANZAS_PAREJA,
     bg: '#FFF0C8',
     accent: COLORS.primaryYellow,
   },
@@ -54,13 +55,13 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate('Simuladores')}
+          onPress={() => navigation.navigate(ROUTES.SIMULADORES)}
         >
           <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate('Simuladores')}
+          onPress={() => navigation.navigate(ROUTES.SIMULADORES)}
         >
           <Text style={styles.navText}>Cursos y libros</Text>
         </TouchableOpacity>

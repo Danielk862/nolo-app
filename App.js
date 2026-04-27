@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { supabase } from './lib/supabase';
+import { ROUTES } from './constants/routes';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -51,22 +52,22 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator
-        initialRouteName={session ? 'Home' : 'Login'}
+        initialRouteName={session ? ROUTES.HOME : ROUTES.LOGIN}
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="Login"              component={LoginScreen} />
-        <Stack.Screen name="Register"           component={RegisterScreen} />
-        <Stack.Screen name="Welcome"            component={WelcomeScreen} />
-        <Stack.Screen name="Home"               component={HomeScreen} />
-        <Stack.Screen name="FinanzasPersonales" component={FinanzasPersonalesScreen} />
-        <Stack.Screen name="FinanzasPareja"     component={FinanzasParejaScreen} />
-        <Stack.Screen name="Simuladores"          component={SimuladoresScreen} />
-        <Stack.Screen name="SimuladorCDT"         component={CDTScreen} />
-        <Stack.Screen name="SimuladorDeuda"       component={DeudaBancoScreen} />
-        <Stack.Screen name="SimuladorEmergencia"  component={FondoEmergenciaScreen} />
-        <Stack.Screen name="SimuladorAhorro"      component={AhorroScreen} />
-        <Stack.Screen name="SimuladorPension"     component={PlanPensionScreen} />
-        <Stack.Screen name="SimuladorPrestamos"   component={PrestamosScreen} />
+        <Stack.Screen name={ROUTES.LOGIN}                component={LoginScreen} />
+        <Stack.Screen name={ROUTES.REGISTER}             component={RegisterScreen} />
+        <Stack.Screen name={ROUTES.WELCOME}              component={WelcomeScreen} />
+        <Stack.Screen name={ROUTES.HOME}                 component={HomeScreen} />
+        <Stack.Screen name={ROUTES.FINANZAS_PERSONALES}  component={FinanzasPersonalesScreen} />
+        <Stack.Screen name={ROUTES.FINANZAS_PAREJA}      component={FinanzasParejaScreen} />
+        <Stack.Screen name={ROUTES.SIMULADORES}          component={SimuladoresScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_CDT}        component={CDTScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_DEUDA}      component={DeudaBancoScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_EMERGENCIA} component={FondoEmergenciaScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_AHORRO}     component={AhorroScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_PENSION}    component={PlanPensionScreen} />
+        <Stack.Screen name={ROUTES.SIMULADOR_PRESTAMOS}  component={PrestamosScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

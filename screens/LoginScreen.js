@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Animated,
-  Platform, ActivityIndicator,
+  Platform, ActivityIndicator, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 import styles from '../styles/screens/LoginScreen.styles';
+import { ROUTES } from '../constants/routes';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
   if (open) {
@@ -155,11 +156,14 @@ export default function LoginScreen({ navigation, route }) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.inner}
       >
-        <View style={styles.avatarContainer}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarEmoji}>👩‍🦰</Text>
-          </View>
-        </View>
+
+      <View> 
+        <View style={styles.avatar}> 
+          <Text style={styles.avatarEmoji}>
+            <Image source={require('../assets/images/cerdito_inicio.png')} />
+          </Text> 
+        </View> 
+      </View>
 
         {/* Username */}
         <View style={styles.fieldBlock}>
@@ -216,7 +220,7 @@ export default function LoginScreen({ navigation, route }) {
           }
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.REGISTER)}>
           <Text style={styles.registerLink}>
             ¿No tienes cuenta?{' '}
             <Text style={styles.registerLinkBold}>Regístrate</Text>

@@ -35,21 +35,11 @@ export default StyleSheet.create({
     paddingHorizontal: SPACING.xl,
     gap: SPACING.md,
   },
-  avatarContainer: {
-    marginBottom: SPACING.lg,
-  },
   avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: COLORS.white,
+    width: 150,
+    height: 150,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 8,
   },
   avatarEmoji: {
     fontSize: 60,

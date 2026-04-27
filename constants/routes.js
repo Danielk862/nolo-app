@@ -1,0 +1,15 @@
+export const ROUTES = {
+  LOGIN:                'Login',
+  REGISTER:             'Register',
+  WELCOME:              'Welcome',
+  HOME:                 'Home',
+  FINANZAS_PERSONALES:  'FinanzasPersonales',
+  FINANZAS_PAREJA:      'FinanzasPareja',
+  SIMULADORES:          'Simuladores',
+  SIMULADOR_CDT:        'SimuladorCDT',
+  SIMULADOR_DEUDA:      'SimuladorDeuda',
+  SIMULADOR_EMERGENCIA: 'SimuladorEmergencia',
+  SIMULADOR_AHORRO:     'SimuladorAhorro',
+  SIMULADOR_PENSION:    'SimuladorPension',
+  SIMULADOR_PRESTAMOS:  'SimuladorPrestamos',
+};

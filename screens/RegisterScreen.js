@@ -11,19 +11,9 @@ import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 import { GeoModel } from '../models';
 import styles, { dropStyles, fieldStyles } from '../styles/screens/RegisterScreen.styles';
-
-const DOC_TYPES = [
-  { value: 'CC', label: 'CC – Cédula de Ciudadanía' },
-  { value: 'CE', label: 'CE – Cédula de Extranjería' },
-  { value: 'PA', label: 'PA – Pasaporte' },
-  { value: 'TI', label: 'TI – Tarjeta de Identidad' },
-];
-const GENDERS = [
-  { value: 'Masculino', label: 'Masculino' },
-  { value: 'Femenino', label: 'Femenino' },
-  { value: 'No binario', label: 'No binario' },
-  { value: 'Prefiero no decir', label: 'Prefiero no decir' },
-];
+import { DOC_TYPES } from '../constants/documentTypes';
+import { ROUTES } from '../constants/routes';
+import { GENDERS } from '../constants/genders';
 
 function Dropdown({ options, value, onSelect, error, placeholder, title, disabled, loading }) {
   const [open, setOpen] = useState(false);
@@ -187,7 +177,7 @@ export default function RegisterScreen({ navigation }) {
   const validate = () => {
     const e = {};
     if (!form.username.trim()) e.username = 'Requerido';
-    else if (form.username.length < 3) e.username = 'Mínimo 3 caracteres';
+    else if (form.username.length < 6) e.username = 'Mínimo 6 caracteres';
     else if (/\s/.test(form.username)) e.username = 'Sin espacios';
 
     if (!form.email.trim()) e.email = 'Requerido';
@@ -272,7 +262,7 @@ export default function RegisterScreen({ navigation }) {
       await supabase.auth.signOut();
 
       // 4. Redirigir al login con mensaje de éxito
-      navigation.navigate('Login', { registered: true });
+      navigation.navigate(ROUTES.LOGIN, { registered: true });
     } catch {
       setErrors({ general: 'Error de conexión. Intenta de nuevo.' });
     } finally {
@@ -563,7 +553,7 @@ export default function RegisterScreen({ navigation }) {
 
           <TouchableOpacity
             style={styles.loginLink}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate(ROUTES.LOGIN)}
           >
             <Text style={styles.loginLinkText}>
               ¿Ya tienes cuenta?{' '}

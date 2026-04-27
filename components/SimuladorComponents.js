@@ -1,14 +1,9 @@
 import { View, Text, TextInput } from 'react-native';
 import { COLORS } from '../constants/theme';
 import simStyles from '../styles/components/SimuladorComponents.styles';
+import { formatMoney } from '../utils/formatMoney';
 
 export { simStyles };
-
-function formatMoney(raw) {
-  const digits = raw.replace(/[^0-9]/g, '');
-  if (!digits) return '';
-  return parseInt(digits, 10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
 
 export function SimInput({ label, value, onChange, money = false }) {
   const handleChange = (text) => {

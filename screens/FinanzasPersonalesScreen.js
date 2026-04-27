@@ -11,6 +11,8 @@ import LogoutButton from '../components/LogoutButton';
 import MonthSelector from '../components/MonthSelector';
 import PieChart from '../components/PieChart';
 import styles from '../styles/screens/FinanzasPersonalesScreen.styles';
+import { formatMoney } from '../utils/formatMoney';
+import { ROUTES } from '../constants/routes';
 
 const INCOME_CATEGORIES = [
   { id: 'salario', label: 'Salario', emoji: '👤', color: COLORS.chartGreen2 },
@@ -77,11 +79,6 @@ export default function FinanzasPersonalesScreen({ navigation }) {
   ].filter(d => d.value > 0);
 
   const fmt = (v) => `$${v.toLocaleString('es-CO')} COP`;
-  const formatMoney = (raw) => {
-    const digits = raw.replace(/[^0-9]/g, '');
-    if (!digits) return '';
-    return parseInt(digits, 10).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  };
 
   const openEdit = (cat, type) => {
     setEditCategory({ ...cat, type });
@@ -295,7 +292,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate('Simuladores')}
+        onInicio={() => navigation.navigate(ROUTES.SIMULADORES)}
         accentColor={COLORS.darkGreen}
       />
 
