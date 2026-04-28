@@ -4,6 +4,7 @@ import {
   ActivityIndicator, Platform,
   KeyboardAvoidingView, Modal, FlatList,
 } from 'react-native';
+import Svg, { Path, Circle } from 'react-native-svg';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
@@ -15,6 +16,29 @@ import { DOC_TYPES } from '../constants/documentTypes';
 import { ROUTES } from '../constants/routes';
 import { GENDERS } from '../constants/genders';
 import { hashPassword } from '../utils/passwordCrypto';
+
+function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
+  if (open) {
+    return (
+      <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+        <Path
+          d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+          stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"
+        />
+        <Circle cx="12" cy="12" r="3" stroke={color} strokeWidth={2} />
+      </Svg>
+    );
+  }
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+        stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"
+      />
+      <Path d="M1 1l22 22" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    </Svg>
+  );
+}
 
 function Dropdown({ options, value, onSelect, error, placeholder, title, disabled, loading }) {
   const [open, setOpen] = useState(false);
@@ -117,6 +141,8 @@ export default function RegisterScreen({ navigation }) {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [countries, setCountries] = useState([]);
   const [geoStates, setGeoStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -328,8 +354,15 @@ export default function RegisterScreen({ navigation }) {
                   placeholderTextColor={COLORS.gray}
                   value={form.password}
                   onChangeText={set('password')}
-                  secureTextEntry
+                  secureTextEntry={!showPass}
                 />
+                <TouchableOpacity
+                  style={styles.eyeBtn}
+                  onPress={() => setShowPass(v => !v)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <EyeIcon open={showPass} color={COLORS.darkGreen} />
+                </TouchableOpacity>
               </View>
             </Field>
 
@@ -341,8 +374,15 @@ export default function RegisterScreen({ navigation }) {
                   placeholderTextColor={COLORS.gray}
                   value={form.confirmPassword}
                   onChangeText={set('confirmPassword')}
-                  secureTextEntry
+                  secureTextEntry={!showConfirmPass}
                 />
+                <TouchableOpacity
+                  style={styles.eyeBtn}
+                  onPress={() => setShowConfirmPass(v => !v)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <EyeIcon open={showConfirmPass} color={COLORS.darkGreen} />
+                </TouchableOpacity>
               </View>
             </Field>
           </View>

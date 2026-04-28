@@ -4,13 +4,19 @@ import { COLORS, SPACING, RADIUS } from '../../constants/theme';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.backgroundGreen,
+    backgroundColor: COLORS.white,
   },
-  topBar: {
-    alignItems: 'flex-end',
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.xs,
+    paddingVertical: SPACING.md,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightGray,
   },
+  backBtn: { width: 40, alignItems: 'center' },
+  backArrow: { fontSize: 32, color: COLORS.darkGreen, lineHeight: 36 },
   inner: {
     flex: 1,
     alignItems: 'center',
@@ -68,4 +74,5 @@ export default StyleSheet.create({
     fontWeight: '600',
     fontSize: 13,
   },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
 });

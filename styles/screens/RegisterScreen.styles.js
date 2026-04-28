@@ -140,6 +140,11 @@ export default StyleSheet.create({
     fontSize: 15,
     color: COLORS.darkGray,
   },
+  eyeBtn: {
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   alertBox: {
     backgroundColor: '#FDE8E8',
     borderRadius: RADIUS.md,

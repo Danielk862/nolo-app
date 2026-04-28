@@ -13,6 +13,8 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.lightGray,
   },
+  backBtn: { width: 40, alignItems: 'center' },
+  backArrow: { fontSize: 32, color: COLORS.darkYellow, lineHeight: 36 },
   headerEmoji: { fontSize: 28 },
   headerTitle: { flex: 1, fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
   tabs: {

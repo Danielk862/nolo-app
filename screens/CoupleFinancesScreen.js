@@ -12,26 +12,25 @@ import SummarySection from '../components/finances/SummarySection';
 import EditModal from '../components/finances/EditModal';
 import SuccessModal from '../components/SuccessModal';
 import YearSelector from '../components/finances/YearSelector';
-import styles from '../styles/screens/FinanzasPersonalesScreen.styles';
+import styles from '../styles/screens/CoupleFinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';
 import useFinances from '../hooks/useFinances';
 
-export default function FinanzasPersonalesScreen({ navigation }) {
-  const finance = useFinances('personal_finances', {
-    income: COLORS.chartGreen2,
-    expense: COLORS.chartRed,
-    balance: COLORS.chartGreen1,
+export default function CoupleFinancesScreen({ navigation }) {
+  const finance = useFinances('couple_finances', {
+    income: COLORS.primaryYellow,
+    expense: COLORS.red,
+    balance: COLORS.primaryGreen,
   });
 
   return (
     <SafeAreaView style={styles.container}>
       <FinanceHeader
-        emoji="💰"
-        title="Finanzas Personales"
+        emoji="💑"
+        title="Finanzas en pareja"
         navigation={navigation}
-        color={COLORS.darkGray}
         styles={styles}
       />
 
@@ -39,6 +38,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         activeTab={finance.activeTab}
         setActiveTab={finance.setActiveTab}
         styles={styles}
+        gastosStyle
       />
 
       <BalanceBar
@@ -47,7 +47,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         selectedYear={finance.selectedYear}
         loading={finance.loading}
         fmt={finance.fmt}
-        accentColor={COLORS.darkGreen}
+        accentColor={COLORS.darkYellow}
         styles={styles}
       />
 
@@ -62,6 +62,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
             fmt={finance.fmt}
             getPct={finance.getPct}
             openEdit={finance.openEdit}
+            totalColor={COLORS.primaryYellow}
             styles={styles}
           />
         )}
@@ -76,6 +77,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
             fmt={finance.fmt}
             getPct={finance.getPct}
             openEdit={finance.openEdit}
+            totalColor={COLORS.red}
             styles={styles}
           />
         )}
@@ -102,7 +104,8 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         <MonthSelector
           selected={finance.selectedMonth}
           onSelect={finance.setSelectedMonth}
-          accentColor={COLORS.darkGreen}
+          accentColor={COLORS.darkYellow}
+          activeBg={COLORS.primaryYellow}
         />
 
         <View style={styles.selectorHeader}>
@@ -120,8 +123,8 @@ export default function FinanzasPersonalesScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate(ROUTES.SIMULADORES)}
-        accentColor={COLORS.darkGreen}
+        onInicio={() => navigation.navigate(ROUTES.SIMULATORS)}
+        accentColor={COLORS.primaryYellow}
       />
 
       <EditModal
@@ -131,7 +134,7 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         setEditValue={finance.setEditValue}
         onSave={finance.saveEdit}
         onCancel={() => finance.setModalVisible(false)}
-        accentColor={COLORS.darkGreen}
+        accentColor={COLORS.primaryYellow}
         styles={styles}
       />
 
@@ -139,9 +142,8 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         visible={finance.saveSuccess}
         message="El registro se ha guardado exitosamente."
         onClose={finance.clearSaveSuccess}
-        accentColor={COLORS.darkGreen}
+        accentColor={COLORS.primaryYellow}
       />
     </SafeAreaView>
   );
 }
-

@@ -10,8 +10,6 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
-import { CredentialsModel } from '../models';
-import { comparePassword } from '../utils/passwordCrypto';
 import styles from '../styles/screens/LoginScreen.styles';
 import { ROUTES } from '../constants/routes';
 
@@ -115,19 +113,6 @@ export default function LoginScreen({ navigation, route }) {
         return;
       }
       if (!email) {
-        setErrors({ general: 'Usuario o contraseña incorrectos' });
-        return;
-      }
-
-      // Verificar contraseña contra el hash almacenado en credentials
-      const creds = await CredentialsModel.findByUsernameWithPassword(username.trim().toLowerCase());
-      if (!creds || !creds.password) {
-        setErrors({ general: 'Usuario o contraseña incorrectos' });
-        return;
-      }
-
-      const isValid = await comparePassword(password, creds.password);
-      if (!isValid) {
         setErrors({ general: 'Usuario o contraseña incorrectos' });
         return;
       }

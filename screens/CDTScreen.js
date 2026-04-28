@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
-import { SimInput, ResultRow, simStyles } from '../components/SimuladorComponents';
+import { SimInput, ResultRow, simStyles } from '../components/SimulatorComponents';
 import NoloLogo from '../components/NoloLogo';
-import styles from '../styles/screens/simulador.styles';
+import styles from '../styles/screens/simulator.styles';
+import LogoutButton from '../components/LogoutButton';
 
 export default function CDTScreen({ navigation }) {
   const [capital, setCapital] = useState('10000000');
@@ -24,6 +25,7 @@ export default function CDTScreen({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>🏦 CDT</Text>
         <View style={styles.backBtn} />
+        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={26} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>

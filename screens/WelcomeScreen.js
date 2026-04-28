@@ -1,6 +1,7 @@
 import {
   View, Text, TouchableOpacity, Linking,
 } from 'react-native';
+import { ROUTES } from '../constants/routes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
@@ -37,7 +38,7 @@ export default function WelcomeScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueBtn}
-          onPress={() => navigation.replace('Simuladores')}
+          onPress={() => navigation.replace(ROUTES.SIMULATORS)}
         >
           <Text style={styles.continueBtnText}>Continuar →</Text>
         </TouchableOpacity>

@@ -1,11 +1,9 @@
-import {
-  View, Text, TouchableOpacity, ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
-import styles from '../styles/screens/HomeScreen.styles';
+import styles from '../styles/screens/FinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
 
 const MODULE_CARDS = [
@@ -13,26 +11,31 @@ const MODULE_CARDS = [
     id: 'personal',
     emoji: '💰',
     label: 'Finanzas Personales',
-    route: ROUTES.FINANZAS_PERSONALES,
+    route: ROUTES.PERSONAL_FINANCES,
     bg: '#E8F8D0',
     accent: COLORS.darkGreen,
   },
   {
-    id: 'pareja',
+    id: 'couple',
     emoji: '💑',
     label: 'Finanzas en pareja',
-    route: ROUTES.FINANZAS_PAREJA,
+    route: ROUTES.COUPLE_FINANCES,
     bg: '#FFF0C8',
     accent: COLORS.primaryYellow,
   },
 ];
 
-export default function HomeScreen({ navigation }) {
+export default function FinancesScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <Text style={styles.backArrow}>‹</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>💰 Finanzas</Text>
         <LogoutButton navigation={navigation} color={COLORS.darkGray} size={26} />
       </View>
+
       <ScrollView contentContainerStyle={styles.inner}>
         {MODULE_CARDS.map((card) => (
           <TouchableOpacity
@@ -55,13 +58,13 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULADORES)}
+          onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
         >
           <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULADORES)}
+          onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
         >
           <Text style={styles.navText}>Cursos y libros</Text>
         </TouchableOpacity>
@@ -69,4 +72,3 @@ export default function HomeScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
