@@ -82,8 +82,6 @@ function Dropdown({ options, value, onSelect, error, placeholder, title, disable
   );
 }
 
-
-
 function Field({ label, required, error, children }) {
   return (
     <View style={fieldStyles.block}>
@@ -96,7 +94,6 @@ function Field({ label, required, error, children }) {
     </View>
   );
 }
-
 
 export default function RegisterScreen({ navigation }) {
   const [form, setForm] = useState({
@@ -119,7 +116,6 @@ export default function RegisterScreen({ navigation }) {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
   const [countries, setCountries] = useState([]);
   const [geoStates, setGeoStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -565,4 +561,3 @@ export default function RegisterScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-

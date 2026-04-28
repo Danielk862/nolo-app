@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  TextInput, Modal,
+  TextInput, Modal, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
@@ -13,48 +13,115 @@ import PieChart from '../components/PieChart';
 import styles from '../styles/screens/FinanzasParejaScreen.styles';
 import { formatMoney } from '../utils/formatMoney';
 import { ROUTES } from '../constants/routes';
+import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
+import { INCOME_CATEGORIES } from '../constants/incomeCategories';
+import { TABS } from '../constants/tabsFinance';
+import { MONTH_TO_NUMBER } from '../constants/monthToNumber';
+import { supabase } from '../lib/supabase';
 
-const INCOME_CATEGORIES = [
-  { id: 'salario', label: 'Salario', emoji: '👤', color: COLORS.primaryYellow },
-  { id: 'bonos', label: 'Bonos', emoji: '📊', color: '#D4870A' },
-  { id: 'dividendos', label: 'Dividendos', emoji: '💸', color: '#8B5E00' },
-  { id: 'comisiones', label: 'Comisiones', emoji: '💲', color: '#F0C040' },
-  { id: 'otros', label: 'Otros', emoji: '🤲', color: '#E8D080' },
-];
-
-const EXPENSE_CATEGORIES = [
-  { id: 'hogar', label: 'Hogar', emoji: '🏠', color: COLORS.chartYellow },
-  { id: 'comida', label: 'Comida', emoji: '🍽️', color: COLORS.chartOrange },
-  { id: 'transporte', label: 'Trasporte', emoji: '🚌', color: COLORS.chartBrown },
-  { id: 'deudas', label: 'Deudas', emoji: '💳', color: COLORS.chartRed },
-  { id: 'entretenimiento', label: 'Entretenimiento', emoji: '📺', color: COLORS.chartNavy },
-  { id: 'familia', label: 'Familia', emoji: '👨‍👩‍👧', color: '#88AABB' },
-];
-
-const TABS = ['Ingresos', 'Gastos', 'Saldo'];
-
-const INITIAL_DATA = {
-  2025: {
-    Enero: {
-      income: { salario: 5810000, bonos: 1660000, dividendos: 415000, comisiones: 300000, otros: 115000 },
-      expenses: { hogar: 1682500, comida: 480000, transporte: 120000, deudas: 100000, entretenimiento: 72500, familia: 45000 },
-    },
-  },
-};
+const EMPTY_MONTH = { income: {}, expenses: {} };
 
 export default function FinanzasParejaScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState('Ingresos');
   const [selectedMonth, setSelectedMonth] = useState('Enero');
-  const [selectedYear, setSelectedYear] = useState(2025);
-  const [data, setData] = useState(INITIAL_DATA);
+  const [selectedYear, setSelectedYear] = useState(2026);
+  const [data, setData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [editCategory, setEditCategory] = useState(null);
   const [editValue, setEditValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
-  const getMonthData = () => {
-    return data?.[selectedYear]?.[selectedMonth] || { income: {}, expenses: {} };
+  useEffect(() => {
+    loadFinances();
+  }, [selectedMonth, selectedYear]);
+
+  const loadFinances = async () => {
+    setLoading(true);
+    setData(prev => {
+      const updated = { ...prev };
+      if (!updated[selectedYear]) updated[selectedYear] = {};
+      updated[selectedYear][selectedMonth] = { income: {}, expenses: {} };
+      return updated;
+    });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const fiscalMonth = MONTH_TO_NUMBER[selectedMonth];
+      const { data: row, error } = await supabase
+        .from('couple_finances')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('fiscal_year', selectedYear)
+        .eq('fiscal_month', fiscalMonth)
+        .maybeSingle();
+      if (error) throw error;
+      if (!row) return;
+      setData(prev => {
+        const updated = { ...prev };
+        if (!updated[selectedYear]) updated[selectedYear] = {};
+        updated[selectedYear][selectedMonth] = {
+          income: {
+            salario: Number(row.salary) || 0,
+            bonos: Number(row.bonuses) || 0,
+            dividendos: Number(row.dividends) || 0,
+            comisiones: Number(row.commissions) || 0,
+            otros: Number(row.other_income) || 0,
+          },
+          expenses: {
+            hogar: Number(row.housing) || 0,
+            comida: Number(row.food) || 0,
+            transporte: Number(row.transportation) || 0,
+            deudas: Number(row.debts) || 0,
+            entretenimiento: Number(row.entertainment) || 0,
+            familia: Number(row.family) || 0,
+          },
+        };
+        return { ...updated };
+      });
+    } catch {
+      // ignore load errors silently
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const saveFinances = async () => {
+    setSaving(true);
+    setSaveError('');
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Sin sesión activa');
+      const fiscalMonth = MONTH_TO_NUMBER[selectedMonth];
+      const md = data?.[selectedYear]?.[selectedMonth] || EMPTY_MONTH;
+      const { error } = await supabase
+        .from('couple_finances')
+        .upsert({
+          user_id: user.id,
+          fiscal_year: selectedYear,
+          fiscal_month: fiscalMonth,
+          salary: md.income?.salario || 0,
+          bonuses: md.income?.bonos || 0,
+          dividends: md.income?.dividendos || 0,
+          commissions: md.income?.comisiones || 0,
+          other_income: md.income?.otros || 0,
+          housing: md.expenses?.hogar || 0,
+          food: md.expenses?.comida || 0,
+          transportation: md.expenses?.transporte || 0,
+          debts: md.expenses?.deudas || 0,
+          entertainment: md.expenses?.entretenimiento || 0,
+          family: md.expenses?.familia || 0,
+        }, { onConflict: 'user_id,fiscal_year,fiscal_month' });
+      if (error) throw error;
+    } catch (e) {
+      setSaveError(e.message || 'Error al guardar');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const getMonthData = () => data?.[selectedYear]?.[selectedMonth] || EMPTY_MONTH;
   const monthData = getMonthData();
   const totalIncome = Object.values(monthData.income || {}).reduce((s, v) => s + v, 0);
   const totalExpenses = Object.values(monthData.expenses || {}).reduce((s, v) => s + v, 0);
@@ -73,6 +140,8 @@ export default function FinanzasParejaScreen({ navigation }) {
     { value: totalExpenses, color: COLORS.red, label: 'Gastos' },
     { value: Math.max(balance, 0), color: COLORS.primaryGreen, label: 'Saldo' },
   ].filter(d => d.value > 0);
+
+  const summaryTotal = summaryChartData.reduce((s, d) => s + d.value, 0);
 
   const fmt = (v) => `$${v.toLocaleString('es-CO')} COP`;
   const getPct = (val, total) => total > 0 ? `${Math.round((val / total) * 100)}%` : '0%';
@@ -132,7 +201,10 @@ export default function FinanzasParejaScreen({ navigation }) {
 
       <View style={styles.balanceBar}>
         <Text style={styles.balanceText}>Saldo: {fmt(balance)}</Text>
-        <Text style={styles.periodText}>{selectedMonth} {selectedYear} ›</Text>
+        <View style={styles.balanceRight}>
+          <Text style={styles.periodText}>{selectedMonth} {selectedYear}</Text>
+          {loading && <ActivityIndicator size="small" color={COLORS.darkYellow} style={{ marginLeft: 6 }} />}
+        </View>
       </View>
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -144,6 +216,9 @@ export default function FinanzasParejaScreen({ navigation }) {
                   <TouchableOpacity key={cat.id} style={styles.categoryRow} onPress={() => openEdit(cat, 'income')}>
                     <View style={[styles.catDot, { backgroundColor: cat.color }]} />
                     <Text style={styles.catLabel}>{cat.label}</Text>
+                    {(monthData.income?.[cat.id] || 0) > 0 && (
+                      <Text style={styles.catValue}>{fmt(monthData.income[cat.id])}</Text>
+                    )}
                     <Text style={styles.catEmoji}>{cat.emoji}</Text>
                   </TouchableOpacity>
                 ))}
@@ -154,9 +229,12 @@ export default function FinanzasParejaScreen({ navigation }) {
                     <PieChart data={incomeChartData} size={140} />
                     <View style={styles.chartLegend}>
                       {incomeChartData.map(d => (
-                        <Text key={d.label} style={[styles.legendText, { color: d.color }]}>
-                          {d.label} {getPct(d.value, totalIncome)}
-                        </Text>
+                        <View key={d.label} style={styles.legendItem}>
+                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
+                          <Text style={styles.legendText}>
+                            {d.label} {getPct(d.value, totalIncome)}
+                          </Text>
+                        </View>
                       ))}
                     </View>
                   </>
@@ -178,6 +256,9 @@ export default function FinanzasParejaScreen({ navigation }) {
                   <TouchableOpacity key={cat.id} style={styles.categoryRow} onPress={() => openEdit(cat, 'expenses')}>
                     <View style={[styles.catDot, { backgroundColor: cat.color }]} />
                     <Text style={styles.catLabel}>{cat.label}</Text>
+                    {(monthData.expenses?.[cat.id] || 0) > 0 && (
+                      <Text style={styles.catValue}>{fmt(monthData.expenses[cat.id])}</Text>
+                    )}
                     <Text style={styles.catEmoji}>{cat.emoji}</Text>
                   </TouchableOpacity>
                 ))}
@@ -188,9 +269,12 @@ export default function FinanzasParejaScreen({ navigation }) {
                     <PieChart data={expenseChartData} size={140} />
                     <View style={styles.chartLegend}>
                       {expenseChartData.map(d => (
-                        <Text key={d.label} style={[styles.legendText, { color: d.color }]}>
-                          {d.label} {getPct(d.value, totalExpenses)}
-                        </Text>
+                        <View key={d.label} style={styles.legendItem}>
+                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
+                          <Text style={styles.legendText}>
+                            {d.label} {getPct(d.value, totalExpenses)}
+                          </Text>
+                        </View>
                       ))}
                     </View>
                   </>
@@ -210,12 +294,13 @@ export default function FinanzasParejaScreen({ navigation }) {
               <View style={styles.categoryList}>
                 <Text style={styles.resumeTitle}>Resumen</Text>
                 {[
-                  { label: 'Ingresos' },
-                  { label: 'Gastos' },
-                  { label: 'Saldo' },
+                  { label: 'Ingresos', value: totalIncome },
+                  { label: 'Gastos', value: totalExpenses },
+                  { label: 'Saldo', value: balance },
                 ].map(item => (
-                  <View key={item.label} style={styles.resumeRow}>
+                  <View key={item.label} style={[styles.resumeRow, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                     <Text style={styles.resumeLabel}>{item.label}</Text>
+                    <Text style={styles.resumeLabel}>{fmt(item.value)}</Text>
                   </View>
                 ))}
                 <View style={styles.resumeHighlight}>
@@ -228,15 +313,29 @@ export default function FinanzasParejaScreen({ navigation }) {
                     <PieChart data={summaryChartData} size={140} innerRadius={40} />
                     <View style={styles.chartLegend}>
                       {summaryChartData.map(d => (
-                        <Text key={d.label} style={[styles.legendText, { color: d.color }]}>
-                          {d.label}
-                        </Text>
+                        <View key={d.label} style={styles.legendItem}>
+                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
+                          <Text style={styles.legendText}>
+                            {d.label} {getPct(d.value, summaryTotal)}
+                          </Text>
+                        </View>
                       ))}
                     </View>
                   </>
                 )}
               </View>
             </View>
+            {saveError ? <Text style={styles.saveError}>{saveError}</Text> : null}
+            <TouchableOpacity
+              style={[styles.saveBtn, saving && { opacity: 0.6 }]}
+              onPress={saveFinances}
+              disabled={saving}
+            >
+              {saving
+                ? <ActivityIndicator color={COLORS.white} />
+                : <Text style={styles.saveBtnText}>Aceptar</Text>
+              }
+            </TouchableOpacity>
           </View>
         )}
 
@@ -308,4 +407,3 @@ export default function FinanzasParejaScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-

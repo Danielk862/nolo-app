@@ -170,4 +170,17 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   modalBtnText: { fontSize: 15, fontWeight: '600', color: COLORS.darkGray },
+  balanceRight: { flexDirection: 'row', alignItems: 'center' },
+  catValue: { fontSize: 11, color: COLORS.gray, fontWeight: '500', marginRight: 2 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  legendDot: { width: 8, height: 8, borderRadius: 4 },
+  saveBtn: {
+    backgroundColor: COLORS.darkGreen,
+    borderRadius: RADIUS.full,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: SPACING.md,
+  },
+  saveBtnText: { fontSize: 16, fontWeight: '700', color: COLORS.white },
+  saveError: { fontSize: 13, color: COLORS.chartRed, textAlign: 'center', marginTop: SPACING.sm },
 });
