@@ -10,6 +10,7 @@ import BalanceBar from '../components/finances/BalanceBar';
 import CategorySection from '../components/finances/CategorySection';
 import SummarySection from '../components/finances/SummarySection';
 import EditModal from '../components/finances/EditModal';
+import SuccessModal from '../components/SuccessModal';
 import YearSelector from '../components/finances/YearSelector';
 import styles from '../styles/screens/FinanzasPersonalesScreen.styles';
 import { ROUTES } from '../constants/routes';
@@ -132,6 +133,13 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         onCancel={() => finance.setModalVisible(false)}
         accentColor={COLORS.darkGreen}
         styles={styles}
+      />
+
+      <SuccessModal
+        visible={finance.saveSuccess}
+        message="El registro se ha guardado exitosamente."
+        onClose={finance.clearSaveSuccess}
+        accentColor={COLORS.darkGreen}
       />
     </SafeAreaView>
   );

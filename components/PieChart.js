@@ -11,9 +11,14 @@ function polarToCartesian(cx, cy, r, angleDeg) {
 }
 
 function slicePath(cx, cy, r, startAngle, endAngle) {
+  const angle = endAngle - startAngle;
+  if (angle >= 359.99) {
+    // Full circle: use two semi-circular arcs to avoid zero-length path
+    return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx} ${cy + r} A ${r} ${r} 0 1 1 ${cx} ${cy - r} Z`;
+  }
   const start = polarToCartesian(cx, cy, r, endAngle);
   const end = polarToCartesian(cx, cy, r, startAngle);
-  const large = endAngle - startAngle > 180 ? 1 : 0;
+  const large = angle > 180 ? 1 : 0;
   return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${large} 0 ${end.x} ${end.y} Z`;
 }
 

@@ -26,6 +26,7 @@ export default function useFinances(tableName, summaryColors = {}) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const loadFinances = useCallback(async () => {
     setLoading(true);
@@ -116,6 +117,7 @@ export default function useFinances(tableName, summaryColors = {}) {
           family: md.expenses?.familia || 0,
         }, { onConflict: 'user_id,fiscal_year,fiscal_month' });
       if (error) throw error;
+      setSaveSuccess(true);
     } catch (e) {
       setSaveError(e.message || 'Error al guardar');
     } finally {
@@ -199,6 +201,10 @@ export default function useFinances(tableName, summaryColors = {}) {
     setModalVisible(false);
   }, [editValue, editCategory, selectedYear, selectedMonth]);
 
+  const clearSaveSuccess = useCallback(() => {
+    setSaveSuccess(false);
+  }, []);
+
   const fmt = formatMoneyValue;
   const getPct = getPercentage;
 
@@ -226,6 +232,8 @@ export default function useFinances(tableName, summaryColors = {}) {
     expenseChartData,
     summaryChartData,
     summaryTotal,
+    saveSuccess,
+    clearSaveSuccess,
     saveFinances,
     openEdit,
     saveEdit,
