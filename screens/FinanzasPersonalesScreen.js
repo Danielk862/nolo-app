@@ -1,385 +1,118 @@
-import { useState, useEffect } from 'react';
-import {
-  View, Text, TouchableOpacity, ScrollView,
-  TextInput, Modal, ActivityIndicator,
-} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import BottomNav from '../components/BottomNav';
-import LogoutButton from '../components/LogoutButton';
 import MonthSelector from '../components/MonthSelector';
-import PieChart from '../components/PieChart';
+import FinanceHeader from '../components/finances/FinanceHeader';
+import FinanceTabs from '../components/finances/FinanceTabs';
+import BalanceBar from '../components/finances/BalanceBar';
+import CategorySection from '../components/finances/CategorySection';
+import SummarySection from '../components/finances/SummarySection';
+import EditModal from '../components/finances/EditModal';
+import YearSelector from '../components/finances/YearSelector';
 import styles from '../styles/screens/FinanzasPersonalesScreen.styles';
-import { formatMoney } from '../utils/formatMoney';
 import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';
-import { TABS } from '../constants/tabsFinance';
-import { MONTH_TO_NUMBER } from '../constants/monthToNumber';
-import { supabase } from '../lib/supabase';
-
-const EMPTY_MONTH = { income: {}, expenses: {} };
+import useFinances from '../hooks/useFinances';
 
 export default function FinanzasPersonalesScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState('Ingresos');
-  const [selectedMonth, setSelectedMonth] = useState('Enero');
-  const [selectedYear, setSelectedYear] = useState(2026);
-  const [data, setData] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editCategory, setEditCategory] = useState(null);
-  const [editValue, setEditValue] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState('');
-
-  useEffect(() => {
-    loadFinances();
-  }, [selectedMonth, selectedYear]);
-
-  const loadFinances = async () => {
-    setLoading(true);
-    setData(prev => {
-      const updated = { ...prev };
-      if (!updated[selectedYear]) updated[selectedYear] = {};
-      updated[selectedYear][selectedMonth] = { income: {}, expenses: {} };
-      return updated;
-    });
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const fiscalMonth = MONTH_TO_NUMBER[selectedMonth];
-      const { data: row, error } = await supabase
-        .from('personal_finances')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('fiscal_year', selectedYear)
-        .eq('fiscal_month', fiscalMonth)
-        .maybeSingle();
-      if (error) throw error;
-      if (!row) return;
-      setData(prev => {
-        const updated = { ...prev };
-        if (!updated[selectedYear]) updated[selectedYear] = {};
-        updated[selectedYear][selectedMonth] = {
-          income: {
-            salario: Number(row.salary) || 0,
-            bonos: Number(row.bonuses) || 0,
-            dividendos: Number(row.dividends) || 0,
-            comisiones: Number(row.commissions) || 0,
-            otros: Number(row.other_income) || 0,
-          },
-          expenses: {
-            hogar: Number(row.housing) || 0,
-            comida: Number(row.food) || 0,
-            transporte: Number(row.transportation) || 0,
-            deudas: Number(row.debts) || 0,
-            entretenimiento: Number(row.entertainment) || 0,
-            familia: Number(row.family) || 0,
-          },
-        };
-        return { ...updated };
-      });
-    } catch {
-      // ignore load errors silently
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const saveFinances = async () => {
-    setSaving(true);
-    setSaveError('');
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Sin sesión activa');
-      const fiscalMonth = MONTH_TO_NUMBER[selectedMonth];
-      const md = data?.[selectedYear]?.[selectedMonth] || EMPTY_MONTH;
-      const { error } = await supabase
-        .from('personal_finances')
-        .upsert({
-          user_id: user.id,
-          fiscal_year: selectedYear,
-          fiscal_month: fiscalMonth,
-          salary: md.income?.salario || 0,
-          bonuses: md.income?.bonos || 0,
-          dividends: md.income?.dividendos || 0,
-          commissions: md.income?.comisiones || 0,
-          other_income: md.income?.otros || 0,
-          housing: md.expenses?.hogar || 0,
-          food: md.expenses?.comida || 0,
-          transportation: md.expenses?.transporte || 0,
-          debts: md.expenses?.deudas || 0,
-          entertainment: md.expenses?.entretenimiento || 0,
-          family: md.expenses?.familia || 0,
-        }, { onConflict: 'user_id,fiscal_year,fiscal_month' });
-      if (error) throw error;
-    } catch (e) {
-      setSaveError(e.message || 'Error al guardar');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const getMonthData = () => data?.[selectedYear]?.[selectedMonth] || EMPTY_MONTH;
-  const monthData = getMonthData();
-  const totalIncome = Object.values(monthData.income || {}).reduce((s, v) => s + v, 0);
-  const totalExpenses = Object.values(monthData.expenses || {}).reduce((s, v) => s + v, 0);
-  const balance = totalIncome - totalExpenses;
-
-  const incomeChartData = INCOME_CATEGORIES
-    .filter(c => (monthData.income?.[c.id] || 0) > 0)
-    .map(c => ({ value: monthData.income[c.id], color: c.color, label: c.label }));
-
-  const expenseChartData = EXPENSE_CATEGORIES
-    .filter(c => (monthData.expenses?.[c.id] || 0) > 0)
-    .map(c => ({ value: monthData.expenses[c.id], color: c.color, label: c.label }));
-
-  const summaryChartData = [
-    { value: totalIncome, color: COLORS.chartGreen2, label: 'Ingresos' },
-    { value: totalExpenses, color: COLORS.chartRed, label: 'Gastos' },
-    { value: Math.max(balance, 0), color: COLORS.chartGreen1, label: 'Saldo' },
-  ].filter(d => d.value > 0);
-
-  const summaryTotal = summaryChartData.reduce((s, d) => s + d.value, 0);
-
-  const fmt = (v) => `$${v.toLocaleString('es-CO')} COP`;
-  const getPct = (val, total) => total > 0 ? `${Math.round((val / total) * 100)}%` : '0%';
-
-  const openEdit = (cat, type) => {
-    setEditCategory({ ...cat, type });
-    const val = type === 'income'
-      ? (monthData.income?.[cat.id] || 0)
-      : (monthData.expenses?.[cat.id] || 0);
-    setEditValue(String(val));
-    setModalVisible(true);
-  };
-
-  const saveEdit = () => {
-    const numVal = parseInt(editValue.replace(/\D/g, '')) || 0;
-    setData(prev => {
-      const updated = { ...prev };
-      if (!updated[selectedYear]) updated[selectedYear] = {};
-      if (!updated[selectedYear][selectedMonth]) {
-        updated[selectedYear][selectedMonth] = { income: {}, expenses: {} };
-      }
-      if (editCategory.type === 'income') {
-        updated[selectedYear][selectedMonth].income = {
-          ...updated[selectedYear][selectedMonth].income,
-          [editCategory.id]: numVal,
-        };
-      } else {
-        updated[selectedYear][selectedMonth].expenses = {
-          ...updated[selectedYear][selectedMonth].expenses,
-          [editCategory.id]: numVal,
-        };
-      }
-      return { ...updated };
-    });
-    setModalVisible(false);
-  };
+  const finance = useFinances('personal_finances', {
+    income: COLORS.chartGreen2,
+    expense: COLORS.chartRed,
+    balance: COLORS.chartGreen1,
+  });
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerEmoji}>💰</Text>
-        <Text style={styles.headerTitle}>Finanzas Personales</Text>
-        <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
-      </View>
+      <FinanceHeader
+        emoji="💰"
+        title="Finanzas Personales"
+        navigation={navigation}
+        color={COLORS.darkGray}
+        styles={styles}
+      />
 
-      {/* Tabs */}
-      <View style={styles.tabs}>
-        {TABS.map(tab => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tab, activeTab === tab && styles.tabActive]}
-            onPress={() => setActiveTab(tab)}
-          >
-            <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <FinanceTabs
+        activeTab={finance.activeTab}
+        setActiveTab={finance.setActiveTab}
+        styles={styles}
+      />
 
-      {/* Balance bar */}
-      <View style={styles.balanceBar}>
-        <Text style={styles.balanceText}>Saldo: {fmt(balance)}</Text>
-        <View style={styles.balanceRight}>
-          <Text style={styles.periodText}>{selectedMonth} {selectedYear}</Text>
-          {loading && <ActivityIndicator size="small" color={COLORS.darkGreen} style={{ marginLeft: 6 }} />}
-        </View>
-      </View>
+      <BalanceBar
+        balance={finance.balance}
+        selectedMonth={finance.selectedMonth}
+        selectedYear={finance.selectedYear}
+        loading={finance.loading}
+        fmt={finance.fmt}
+        accentColor={COLORS.darkGreen}
+        styles={styles}
+      />
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Income Tab */}
-        {activeTab === 'Ingresos' && (
-          <View style={styles.section}>
-            <View style={styles.row}>
-              <View style={styles.categoryList}>
-                {INCOME_CATEGORIES.map(cat => (
-                  <TouchableOpacity
-                    key={cat.id}
-                    style={styles.categoryRow}
-                    onPress={() => openEdit(cat, 'income')}
-                  >
-                    <View style={[styles.catDot, { backgroundColor: cat.color }]} />
-                    <Text style={styles.catLabel}>{cat.label}</Text>
-                    {(monthData.income?.[cat.id] || 0) > 0 && (
-                      <Text style={styles.catValue}>{fmt(monthData.income[cat.id])}</Text>
-                    )}
-                    <Text style={styles.catEmoji}>{cat.emoji}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              <View style={styles.chartArea}>
-                {incomeChartData.length > 0 && (
-                  <>
-                    <PieChart data={incomeChartData} size={140} />
-                    <View style={styles.chartLegend}>
-                      {incomeChartData.map(d => (
-                        <View key={d.label} style={styles.legendItem}>
-                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
-                          <Text style={styles.legendText}>
-                            {d.label} {getPct(d.value, totalIncome)}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </View>
-            </View>
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total Ingresos:</Text>
-              <Text style={styles.totalValue}>{fmt(totalIncome)}</Text>
-            </View>
-          </View>
+        {finance.activeTab === 'Ingresos' && (
+          <CategorySection
+            categories={INCOME_CATEGORIES}
+            type="income"
+            monthData={finance.monthData}
+            chartData={finance.incomeChartData}
+            total={finance.totalIncome}
+            fmt={finance.fmt}
+            getPct={finance.getPct}
+            openEdit={finance.openEdit}
+            styles={styles}
+          />
         )}
 
-        {/* Expenses Tab */}
-        {activeTab === 'Gastos' && (
-          <View style={styles.section}>
-            <View style={styles.row}>
-              <View style={styles.categoryList}>
-                {EXPENSE_CATEGORIES.map(cat => (
-                  <TouchableOpacity
-                    key={cat.id}
-                    style={styles.categoryRow}
-                    onPress={() => openEdit(cat, 'expenses')}
-                  >
-                    <View style={[styles.catDot, { backgroundColor: cat.color }]} />
-                    <Text style={styles.catLabel}>{cat.label}</Text>
-                    {(monthData.expenses?.[cat.id] || 0) > 0 && (
-                      <Text style={styles.catValue}>{fmt(monthData.expenses[cat.id])}</Text>
-                    )}
-                    <Text style={styles.catEmoji}>{cat.emoji}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              <View style={styles.chartArea}>
-                {expenseChartData.length > 0 && (
-                  <>
-                    <PieChart data={expenseChartData} size={140} />
-                    <View style={styles.chartLegend}>
-                      {expenseChartData.map(d => (
-                        <View key={d.label} style={styles.legendItem}>
-                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
-                          <Text style={styles.legendText}>
-                            {d.label} {getPct(d.value, totalExpenses)}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </View>
-            </View>
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total Gastos:</Text>
-              <Text style={styles.totalValue}>{fmt(totalExpenses)}</Text>
-            </View>
-          </View>
+        {finance.activeTab === 'Gastos' && (
+          <CategorySection
+            categories={EXPENSE_CATEGORIES}
+            type="expenses"
+            monthData={finance.monthData}
+            chartData={finance.expenseChartData}
+            total={finance.totalExpenses}
+            fmt={finance.fmt}
+            getPct={finance.getPct}
+            openEdit={finance.openEdit}
+            styles={styles}
+          />
         )}
 
-        {/* Balance Tab */}
-        {activeTab === 'Saldo' && (
-          <View style={styles.section}>
-            <View style={styles.row}>
-              <View style={styles.categoryList}>
-                <Text style={styles.resumeTitle}>Resumen</Text>
-                {[
-                  { label: 'Ingresos', value: totalIncome },
-                  { label: 'Gastos', value: totalExpenses },
-                  { label: 'Saldo', value: balance },
-                ].map(item => (
-                  <View key={item.label} style={[styles.resumeRow, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <Text style={styles.resumeLabel}>{item.label}</Text>
-                    <Text style={styles.resumeLabel}>{fmt(item.value)}</Text>
-                  </View>
-                ))}
-                <View style={styles.resumeHighlight}>
-                  <Text style={styles.resumeHighlightText}>📊 {fmt(balance)}</Text>
-                </View>
-              </View>
-              <View style={styles.chartArea}>
-                {summaryChartData.length > 0 && (
-                  <>
-                    <PieChart data={summaryChartData} size={140} innerRadius={40} />
-                    <View style={styles.chartLegend}>
-                      {summaryChartData.map(d => (
-                        <View key={d.label} style={styles.legendItem}>
-                          <View style={[styles.legendDot, { backgroundColor: d.color }]} />
-                          <Text style={styles.legendText}>
-                            {d.label} {getPct(d.value, summaryTotal)}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </View>
-            </View>
-            {saveError ? <Text style={styles.saveError}>{saveError}</Text> : null}
-            <TouchableOpacity
-              style={[styles.saveBtn, saving && { opacity: 0.6 }]}
-              onPress={saveFinances}
-              disabled={saving}
-            >
-              {saving
-                ? <ActivityIndicator color={COLORS.white} />
-                : <Text style={styles.saveBtnText}>Aceptar</Text>
-              }
-            </TouchableOpacity>
-          </View>
+        {finance.activeTab === 'Saldo' && (
+          <SummarySection
+            totalIncome={finance.totalIncome}
+            totalExpenses={finance.totalExpenses}
+            balance={finance.balance}
+            chartData={finance.summaryChartData}
+            chartTotal={finance.summaryTotal}
+            fmt={finance.fmt}
+            getPct={finance.getPct}
+            saveFinances={finance.saveFinances}
+            saving={finance.saving}
+            saveError={finance.saveError}
+            styles={styles}
+          />
         )}
 
-        {/* Month selector */}
         <View style={styles.selectorHeader}>
           <Text style={styles.selectorLabel}>Mes ›</Text>
         </View>
         <MonthSelector
-          selected={selectedMonth}
-          onSelect={setSelectedMonth}
+          selected={finance.selectedMonth}
+          onSelect={finance.setSelectedMonth}
           accentColor={COLORS.darkGreen}
         />
 
-        {/* Year selector */}
         <View style={styles.selectorHeader}>
           <Text style={styles.selectorLabel}>Año ›</Text>
         </View>
-        <View style={styles.yearSelector}>
-          {[selectedYear + 1, selectedYear, selectedYear - 1].map(y => (
-            <TouchableOpacity key={y} onPress={() => setSelectedYear(y)}>
-              <Text style={[styles.yearText, y === selectedYear && styles.yearActive]}>
-                {y}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <YearSelector
+          selectedYear={finance.selectedYear}
+          setSelectedYear={finance.setSelectedYear}
+          styles={styles}
+        />
 
-        {/* Nolo logo */}
         <View style={styles.logoArea}>
           <NoloLogo size="sm" color={COLORS.darkGray} />
         </View>
@@ -390,41 +123,17 @@ export default function FinanzasPersonalesScreen({ navigation }) {
         accentColor={COLORS.darkGreen}
       />
 
-      {/* Edit Modal */}
-      <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>
-              {editCategory?.emoji} {editCategory?.label}
-            </Text>
-            <Text style={styles.modalSubtitle}>
-              {editCategory?.type === 'income' ? 'Ingreso (COP)' : 'Gasto (COP)'}
-            </Text>
-            <TextInput
-              style={styles.modalInput}
-              value={formatMoney(editValue)}
-              onChangeText={(text) => setEditValue(text.replace(/[^0-9]/g, ''))}
-              keyboardType="numeric"
-              placeholder="0"
-              autoFocus
-            />
-            <View style={styles.modalBtns}>
-              <TouchableOpacity
-                style={[styles.modalBtn, { backgroundColor: COLORS.lightGray }]}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.modalBtnText}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalBtn, { backgroundColor: COLORS.darkGreen }]}
-                onPress={saveEdit}
-              >
-                <Text style={[styles.modalBtnText, { color: COLORS.white }]}>Guardar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <EditModal
+        visible={finance.modalVisible}
+        editCategory={finance.editCategory}
+        editValue={finance.editValue}
+        setEditValue={finance.setEditValue}
+        onSave={finance.saveEdit}
+        onCancel={() => finance.setModalVisible(false)}
+        accentColor={COLORS.darkGreen}
+        styles={styles}
+      />
     </SafeAreaView>
   );
 }
+
