@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { hashPassword } from '../utils/passwordCrypto';
 
 const TABLE = 'credentials';
 
@@ -23,6 +24,16 @@ const CredentialsModel = {
     return data;
   },
 
+  async findByUsernameWithPassword(username) {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .select('id, username, password, user_id, created_at, updated_at')
+      .eq('username', username)
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
   async create(credentialsData) {
     const { data, error } = await supabase
       .from(TABLE)
@@ -34,9 +45,10 @@ const CredentialsModel = {
   },
 
   async updatePassword(userId, newPassword) {
+    const hashed = await hashPassword(newPassword);
     const { data, error } = await supabase
       .from(TABLE)
-      .update({ password: newPassword })
+      .update({ password: hashed })
       .eq('user_id', userId)
       .select('id, username, user_id, updated_at')
       .single();

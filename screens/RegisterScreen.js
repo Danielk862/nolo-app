@@ -14,6 +14,7 @@ import styles, { dropStyles, fieldStyles } from '../styles/screens/RegisterScree
 import { DOC_TYPES } from '../constants/documentTypes';
 import { ROUTES } from '../constants/routes';
 import { GENDERS } from '../constants/genders';
+import { hashPassword } from '../utils/passwordCrypto';
 
 function Dropdown({ options, value, onSelect, error, placeholder, title, disabled, loading }) {
   const [open, setOpen] = useState(false);
@@ -216,10 +217,13 @@ export default function RegisterScreen({ navigation }) {
         return;
       }
 
+      // Hashear contraseña para almacenar en la tabla credentials
+      const hashedPassword = await hashPassword(form.password);
+
       // 2. Insertar perfil usando RPC con SECURITY DEFINER (no requiere sesión activa)
       const { data: result, error: rpcError } = await supabase.rpc('register_user_profile', {
         p_username:        form.username.trim().toLowerCase(),
-        p_password:        form.password,
+        p_password:        hashedPassword,
         p_document_type:   form.documentType,
         p_document_number: form.documentNumber.trim(),
         p_first_name:      form.firstName.trim(),
@@ -259,8 +263,9 @@ export default function RegisterScreen({ navigation }) {
 
       // 4. Redirigir al login con mensaje de éxito
       navigation.navigate(ROUTES.LOGIN, { registered: true });
-    } catch {
-      setErrors({ general: 'Error de conexión. Intenta de nuevo.' });
+    } catch (err) {
+      console.error('[Register Error]', err);
+      setErrors({ general: `Error: ${err?.message ?? 'desconocido'}` });
     } finally {
       setLoading(false);
     }
