@@ -110,7 +110,7 @@ export default function PersonalFinancesScreen({ navigation }) {
         <YearSelector
           selectedYear={finance.selectedYear}
           setSelectedYear={finance.setSelectedYear}
-          styles={styles}
+          accentColor={COLORS.darkGreen}
         />
 
         <View style={styles.logoArea}>

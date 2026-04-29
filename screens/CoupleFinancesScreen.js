@@ -114,7 +114,7 @@ export default function CoupleFinancesScreen({ navigation }) {
         <YearSelector
           selectedYear={finance.selectedYear}
           setSelectedYear={finance.setSelectedYear}
-          styles={styles}
+          accentColor={COLORS.darkYellow}
         />
 
         <View style={styles.logoArea}>

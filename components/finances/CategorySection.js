@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import PieChart from '../PieChart';
 
 export default function CategorySection({
@@ -24,11 +24,15 @@ export default function CategorySection({
               onPress={() => openEdit(cat, type)}
             >
               <View style={[styles.catDot, { backgroundColor: cat.color }]} />
-              <Text style={styles.catLabel}>{cat.label}</Text>
-              {(monthData[type === 'income' ? 'income' : 'expenses']?.[cat.id] || 0) > 0 && (
-                <Text style={styles.catValue}>
-                  {fmt(monthData[type === 'income' ? 'income' : 'expenses'][cat.id])}
-                </Text>
+              {(monthData[type === 'income' ? 'income' : 'expenses']?.[cat.id] || 0) > 0 ? (
+                <View style={localStyles.labelValueCol}>
+                  <Text style={styles.catLabel} numberOfLines={1}>{cat.label}</Text>
+                  <Text style={styles.catValue} numberOfLines={1}>
+                    {fmt(monthData[type === 'income' ? 'income' : 'expenses'][cat.id])}
+                  </Text>
+                </View>
+              ) : (
+                <Text style={styles.catLabel} numberOfLines={1}>{cat.label}</Text>
               )}
               <Text style={styles.catEmoji}>{cat.emoji}</Text>
             </TouchableOpacity>
@@ -59,3 +63,11 @@ export default function CategorySection({
     </View>
   );
 }
+
+const localStyles = StyleSheet.create({
+  labelValueCol: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: 1,
+  },
+});
