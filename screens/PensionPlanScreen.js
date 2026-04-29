@@ -43,6 +43,7 @@ export default function PensionPlanScreen({ navigation }) {
         )}
         <View style={styles.logoArea}>
           <NoloLogo size="sm" color={COLORS.darkGray} />
+          <Text style={styles.byline}>by la Peliroja Financiera</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

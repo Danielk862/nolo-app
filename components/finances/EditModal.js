@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import { formatMoney } from '../../utils/formatMoney';
 import { COLORS } from '../../constants/theme';
 
@@ -14,6 +14,10 @@ export default function EditModal({
 }) {
   return (
     <Modal visible={visible} transparent animationType="slide">
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       <View style={styles.modalOverlay}>
         <View style={styles.modalCard}>
           <Text style={styles.modalTitle}>
@@ -46,6 +50,7 @@ export default function EditModal({
           </View>
         </View>
       </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

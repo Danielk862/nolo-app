@@ -43,6 +43,10 @@ export default StyleSheet.create({
     backgroundColor: COLORS.offWhite,
   },
   balanceText: { fontSize: 14, fontWeight: '600', color: COLORS.darkGray },
+  byline: {
+    color: COLORS.gray,
+    fontSize: 14,
+  },
   periodText: { fontSize: 14, color: COLORS.gray },
   scroll: { flex: 1 },
   section: { paddingHorizontal: SPACING.md, paddingVertical: SPACING.md },

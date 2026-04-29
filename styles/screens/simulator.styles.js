@@ -14,6 +14,10 @@ export default StyleSheet.create({
   },
   backBtn: { width: 40, alignItems: 'center' },
   backArrow: { fontSize: 32, color: COLORS.darkGreen, lineHeight: 36 },
+  byline: {
+    color: COLORS.gray,
+    fontSize: 14,
+  },
   headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
   content: { padding: SPACING.md, gap: SPACING.md },
   description: { fontSize: 14, color: COLORS.gray, marginBottom: SPACING.xs },
