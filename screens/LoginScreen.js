@@ -220,6 +220,13 @@ export default function LoginScreen({ navigation, route }) {
           }
         </TouchableOpacity>
 
+        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>
+          <Text style={styles.registerLink}>
+            ¿Olvidaste tu contraseña?{' '}
+            <Text style={styles.registerLinkBold}>Recuperar aquí</Text>
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.navigate(ROUTES.REGISTER)}>
           <Text style={styles.registerLink}>
             ¿No tienes cuenta?{' '}

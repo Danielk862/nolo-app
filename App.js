@@ -8,6 +8,9 @@ import { ROUTES } from './constants/routes';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import OTPScreen from './screens/OTPScreen';
+import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import FinancesScreen from './screens/FinancesScreen';
 import PersonalFinancesScreen from './screens/PersonalFinancesScreen';
 import CoupleFinancesScreen from './screens/CoupleFinancesScreen';
@@ -54,6 +57,9 @@ export default function App() {
         <Stack.Screen name={ROUTES.LOGIN}               component={LoginScreen} />
         <Stack.Screen name={ROUTES.REGISTER}            component={RegisterScreen} />
         <Stack.Screen name={ROUTES.WELCOME}             component={WelcomeScreen} />
+        <Stack.Screen name={ROUTES.FORGOT_PASSWORD}     component={ForgotPasswordScreen} />
+        <Stack.Screen name={ROUTES.OTP_VERIFY}          component={OTPScreen} />
+        <Stack.Screen name={ROUTES.CHANGE_PASSWORD}     component={ChangePasswordScreen} />
         <Stack.Screen name={ROUTES.FINANCES}            component={FinancesScreen} />
         <Stack.Screen name={ROUTES.PERSONAL_FINANCES}   component={PersonalFinancesScreen} />
         <Stack.Screen name={ROUTES.COUPLE_FINANCES}     component={CoupleFinancesScreen} />
