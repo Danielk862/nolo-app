@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator,
+  KeyboardAvoidingView, Platform, ActivityIndicator, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle } from 'react-native-svg';
@@ -40,6 +40,7 @@ export default function ChangePasswordScreen({ navigation }) {
   const [showConfirm, setShowConfirm]   = useState(false);
   const [errors, setErrors]             = useState({});
   const [loading, setLoading]           = useState(false);
+  const [successPopupVisible, setSuccessPopupVisible] = useState(false);
 
   const minLength  = password.length >= 8;
   const hasNumber  = /\d/.test(password);
@@ -62,7 +63,11 @@ export default function ChangePasswordScreen({ navigation }) {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       await supabase.auth.signOut();
-      navigation.reset({ index: 0, routes: [{ name: ROUTES.LOGIN }] });
+      setSuccessPopupVisible(true);
+      setTimeout(() => {
+        setSuccessPopupVisible(false);
+        navigation.reset({ index: 0, routes: [{ name: ROUTES.LOGIN }] });
+      }, 3000);
     } catch (e) {
       setErrors({ general: e?.message || 'Error al guardar. Intenta de nuevo.' });
     } finally {
@@ -72,6 +77,22 @@ export default function ChangePasswordScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+
+      {/* Popup: contraseña actualizada */}
+      <Modal visible={successPopupVisible} transparent animationType="fade">
+        <View style={styles.popupOverlay}>
+          <View style={styles.popupCard}>
+            <View style={styles.popupIconCircle}>
+              <Text style={styles.popupIconText}>✓</Text>
+            </View>
+            <Text style={styles.popupTitle}>¡Contraseña actualizada!</Text>
+            <Text style={styles.popupMessage}>
+              Tu contraseña ha sido guardada. En un momento serás redirigido para iniciar sesión.
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.inner}

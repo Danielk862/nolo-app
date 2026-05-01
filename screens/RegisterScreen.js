@@ -150,6 +150,8 @@ export default function RegisterScreen({ navigation }) {
   const [loadingCities, setLoadingCities] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateValue, setDateValue] = useState(new Date(2000, 0, 1));
+  const [successPopupVisible, setSuccessPopupVisible] = useState(false);
+  const [errorPopupVisible, setErrorPopupVisible] = useState(false);
 
   useEffect(() => {
     GeoModel.getCountries()
@@ -222,7 +224,11 @@ export default function RegisterScreen({ navigation }) {
   };
 
   const handleRegister = async () => {
-    if (!validate()) return;
+    if (!validate()) {
+      setErrorPopupVisible(true);
+      setTimeout(() => setErrorPopupVisible(false), 3000);
+      return;
+    }
     setLoading(true);
     setErrors({});
 
@@ -287,8 +293,12 @@ export default function RegisterScreen({ navigation }) {
       // 3. Cerrar sesión automática (el usuario debe hacer login manualmente)
       await supabase.auth.signOut();
 
-      // 4. Redirigir al login con mensaje de éxito
-      navigation.navigate(ROUTES.LOGIN, { registered: true });
+      // 4. Mostrar popup de éxito y redirigir al login después de 3 segundos
+      setSuccessPopupVisible(true);
+      setTimeout(() => {
+        setSuccessPopupVisible(false);
+        navigation.navigate(ROUTES.LOGIN, { registered: true });
+      }, 3000);
     } catch (err) {
       console.error('[Register Error]', err);
       setErrors({ general: `Error: ${err?.message ?? 'desconocido'}` });
@@ -299,6 +309,37 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+
+      {/* Popup: registro exitoso */}
+      <Modal visible={successPopupVisible} transparent animationType="fade">
+        <View style={styles.popupOverlay}>
+          <View style={styles.popupCard}>
+            <View style={styles.popupIconCircle}>
+              <Text style={styles.popupIconText}>✓</Text>
+            </View>
+            <Text style={styles.popupTitle}>¡Registro exitoso!</Text>
+            <Text style={styles.popupMessage}>
+              Tu cuenta ha sido creada. En un momento serás redirigido al inicio de sesión.
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Popup: error de validación */}
+      <Modal visible={errorPopupVisible} transparent animationType="fade">
+        <View style={styles.popupOverlay}>
+          <View style={styles.popupCard}>
+            <View style={[styles.popupIconCircle, styles.popupIconCircleError]}>
+              <Text style={styles.popupIconText}>!</Text>
+            </View>
+            <Text style={[styles.popupTitle, styles.popupTitleError]}>Campos incompletos</Text>
+            <Text style={styles.popupMessage}>
+              Algunos campos tienen errores. Revisa el formulario e intenta de nuevo.
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
