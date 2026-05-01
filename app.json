@@ -4,17 +4,38 @@
     "slug": "nolo-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.pelirojafinanciera.nolo"
     },
     "android": {
-      "package": "com.pelirojafinanciera.nolo"
+      "package": "com.pelirojafinanciera.nolo",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#C8F090"
+      }
     },
-    "plugins": [
-      "expo-secure-store",
-      "@react-native-community/datetimepicker"
-    ]
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "userInterfaceStyle": "light",
+    "plugins": [],
+    "extra": {
+      "eas": {
+        "projectId": "39647004-72f0-4616-85d6-335fdd6ae647"
+      }
+    },
+    "owner": "daniel529"
   }
 }
