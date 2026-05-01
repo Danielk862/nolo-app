@@ -55,27 +55,6 @@ export default function LoginScreen({ navigation, route }) {
     }, [])
   );
 
-  // Toast animation
-  const toastOpacity  = useRef(new Animated.Value(0)).current;
-  const toastTranslateY = useRef(new Animated.Value(-16)).current;
-
-  useEffect(() => {
-    if (!registered) return;
-    Animated.parallel([
-      Animated.timing(toastOpacity,    { toValue: 1, duration: 350, useNativeDriver: true }),
-      Animated.timing(toastTranslateY, { toValue: 0, duration: 350, useNativeDriver: true }),
-    ]).start();
-
-    const hide = setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(toastOpacity,    { toValue: 0, duration: 350, useNativeDriver: true }),
-        Animated.timing(toastTranslateY, { toValue: -16, duration: 350, useNativeDriver: true }),
-      ]).start();
-    }, 3000);
-
-    return () => clearTimeout(hide);
-  }, [registered]);
-
   const clearError = (field) => setErrors((prev) => ({ ...prev, [field]: null }));
 
   // Auto-limpiar mensaje general después de 3 segundos
@@ -143,15 +122,6 @@ export default function LoginScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-
-      {/* Toast popup - cuenta creada */}
-      <Animated.View
-        style={[styles.toast, { opacity: toastOpacity, transform: [{ translateY: toastTranslateY }] }]}
-        pointerEvents="none"
-      >
-        <Text style={styles.toastText}>✓  ¡Cuenta creada! Ya puedes iniciar sesión.</Text>
-      </Animated.View>
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.inner}
