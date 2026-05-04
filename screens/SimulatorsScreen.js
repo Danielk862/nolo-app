@@ -9,12 +9,14 @@ import styles from '../styles/screens/SimulatorsScreen.styles';
 import { ROUTES } from '../constants/routes';
 
 const SIMULATORS = [
-  { id: 'cdt',       emoji: '🏦', label: 'CDT',                description: 'Simula el rendimiento de un CDT',           route: ROUTES.SIMULATOR_CDT },
-  { id: 'debt',      emoji: '💳', label: 'Deuda Banco',         description: 'Calcula el costo real de tu deuda bancaria', route: ROUTES.SIMULATOR_DEBT },
-  { id: 'emergency', emoji: '🛡️', label: 'Fondo de Emergencia', description: 'Calcula cuánto necesitas en tu fondo',       route: ROUTES.SIMULATOR_EMERGENCY },
-  { id: 'savings',   emoji: '🐷', label: 'Ahorro',              description: 'Proyecta el crecimiento de tus ahorros',     route: ROUTES.SIMULATOR_SAVINGS },
-  { id: 'pension',   emoji: '👴', label: 'Plan Pensión',         description: 'Estima tu pensión futura',                  route: ROUTES.SIMULATOR_PENSION },
-  { id: 'loans',     emoji: '📋', label: 'Préstamos',            description: 'Calcula cuotas y total a pagar',            route: ROUTES.SIMULATOR_LOANS },
+  { id: 'finances',  emoji: '💰', label: 'Finanzas',            description: 'Ver Finanzas Personales y en Pareja',         route: ROUTES.FINANCES },
+  { id: 'cdt',       emoji: '🏦', label: 'CDT',                 description: 'Simula el rendimiento de un CDT',             route: ROUTES.SIMULATOR_CDT },
+  { id: 'debt',      emoji: '💳', label: 'Deuda Banco',         description: 'Calcula el costo real de tu deuda bancaria',  route: ROUTES.SIMULATOR_DEBT },
+  { id: 'emergency', emoji: '🛡️', label: 'Fondo de Emergencia', description: 'Calcula cuánto necesitas en tu fondo',        route: ROUTES.SIMULATOR_EMERGENCY },
+  { id: 'savings',   emoji: '🐷', label: 'Ahorro',              description: 'Proyecta el crecimiento de tus ahorros',      route: ROUTES.SIMULATOR_SAVINGS },
+  { id: 'pension',   emoji: '👴', label: 'Plan Pensión',        description: 'Estima tu pensión futura',                    route: ROUTES.SIMULATOR_PENSION },
+  { id: 'loans',     emoji: '📋', label: 'Préstamos',           description: 'Calcula cuotas y total a pagar',              route: ROUTES.SIMULATOR_LOANS },
+  { id: 'podcast',   emoji: '🎙️', label: 'Podcast',             description: 'Escucha nuestro podcast sobre finanzas',      route: ROUTES.SIMULATOR_PODCAST },
 ];
 
 export default function SimulatorsScreen({ navigation }) {
@@ -27,18 +29,6 @@ export default function SimulatorsScreen({ navigation }) {
       </View>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        <TouchableOpacity
-          style={styles.simCard}
-          onPress={() => navigation.navigate(ROUTES.FINANCES)}
-        >
-          <Text style={styles.simEmoji}>💰</Text>
-          <View style={styles.simInfo}>
-            <Text style={styles.simLabel}>Finanzas</Text>
-            <Text style={styles.simDesc}>Ver Finanzas Personales y en Pareja</Text>
-          </View>
-          <Text style={styles.arrow}>›</Text>
-        </TouchableOpacity>
-
         {SIMULATORS.map(sim => (
           <TouchableOpacity
             key={sim.id}

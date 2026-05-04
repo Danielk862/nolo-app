@@ -21,6 +21,7 @@ import EmergencyFundScreen from './screens/EmergencyFundScreen';
 import SavingsScreen from './screens/SavingsScreen';
 import PensionPlanScreen from './screens/PensionPlanScreen';
 import LoansScreen from './screens/LoansScreen';
+import PodcastScreen from './screens/podcastScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +71,7 @@ export default function App() {
         <Stack.Screen name={ROUTES.SIMULATOR_SAVINGS}   component={SavingsScreen} />
         <Stack.Screen name={ROUTES.SIMULATOR_PENSION}   component={PensionPlanScreen} />
         <Stack.Screen name={ROUTES.SIMULATOR_LOANS}     component={LoansScreen} />
+        <Stack.Screen name={ROUTES.SIMULATOR_PODCAST}   component={PodcastScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

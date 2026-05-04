@@ -15,4 +15,5 @@ export const ROUTES = {
   SIMULATOR_SAVINGS:   'SimulatorSavings',
   SIMULATOR_PENSION:   'SimulatorPension',
   SIMULATOR_LOANS:     'SimulatorLoans',
+  SIMULATOR_PODCAST:   'SimulatorPodcast',
 };

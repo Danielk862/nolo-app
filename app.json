@@ -24,9 +24,11 @@
     },
     "android": {
       "package": "com.pelirojafinanciera.nolo",
+      "icon":"./assets/icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#C8F090"
+        "foregroundImage": "./assets/icon-background.png",
+        "backgroundColor": "#C8F090",
+        "monochromeImage": "./assets/icon.png"
       }
     },
     "web": {
