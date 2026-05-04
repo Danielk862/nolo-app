@@ -7,10 +7,19 @@ import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/pages/WelcomeScreen.styles';
+import { useLoader } from '../context/LoadingContext';
 
 export default function WelcomeScreen({ navigation }) {
+  const { showLoader, hideLoader } = useLoader();
+
   const handleTutorial = () => {
     Linking.openURL('https://www.youtube.com');
+  };
+
+  const handleContinue = () => {
+    showLoader();
+    navigation.replace(ROUTES.SIMULATORS);
+    setTimeout(hideLoader, 2000);
   };
 
   return (
@@ -38,7 +47,7 @@ export default function WelcomeScreen({ navigation }) {
 
         <TouchableOpacity
           style={styles.continueBtn}
-          onPress={() => navigation.replace(ROUTES.SIMULATORS)}
+          onPress={handleContinue}
         >
           <Text style={styles.continueBtnText}>Continuar →</Text>
         </TouchableOpacity>

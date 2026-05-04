@@ -1,17 +1,22 @@
 import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ActivityIndicator,
+  KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../lib/supabase';
 import { ROUTES } from '../constants/routes';
 import styles from '../styles/pages/ForgotPasswordScreen.styles';
+import { useLoader } from '../context/LoadingContext';
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function ForgotPasswordScreen({ navigation }) {
+  const { showLoader, hideLoader } = useLoader();
   const [username, setUsername] = useState('');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
+    
+  useMessagesLoader("Cargando...");
 
   const handleSend = async () => {
     const trimmed = username.trim().toLowerCase();
@@ -20,6 +25,8 @@ export default function ForgotPasswordScreen({ navigation }) {
       return;
     }
     setLoading(true);
+    showLoader("Enviando OTP, por favor espera...");
+
     setError('');
     try {
       const { data: email, error: rpcError } = await supabase
@@ -43,6 +50,7 @@ export default function ForgotPasswordScreen({ navigation }) {
       setError(e?.message || 'Error al enviar el código. Intenta de nuevo.');
     } finally {
       setLoading(false);
+      hideLoader();
     }
   };
 
@@ -88,10 +96,7 @@ export default function ForgotPasswordScreen({ navigation }) {
           onPress={handleSend}
           disabled={loading}
         >
-          {loading
-            ? <ActivityIndicator color="#FFFFFF" />
-            : <Text style={styles.sendBtnText}>Enviar código</Text>
-          }
+          <Text style={styles.sendBtnText}>Enviar código</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -17,6 +17,7 @@ import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';
 import useFinances from '../hooks/useFinances';
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function PersonalFinancesScreen({ navigation }) {
   const finance = useFinances('personal_finances', {
@@ -24,6 +25,8 @@ export default function PersonalFinancesScreen({ navigation }) {
     expense: COLORS.chartRed,
     balance: COLORS.chartGreen1,
   });
+    
+  useMessagesLoader("Cargando...");
 
   return (
     <SafeAreaView style={styles.container}>

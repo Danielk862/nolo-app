@@ -5,6 +5,7 @@ import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/pages/FinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 const MODULE_CARDS = [
   {
@@ -25,7 +26,9 @@ const MODULE_CARDS = [
   },
 ];
 
-export default function FinancesScreen({ navigation }) {
+export default function FinancesScreen({ navigation }) {  
+  useMessagesLoader("Cargando...");
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

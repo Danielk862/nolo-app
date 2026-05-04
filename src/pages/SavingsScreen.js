@@ -7,6 +7,7 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function SavingsScreen({ navigation }) {
   const [savings, setSavings] = useState('500000');
@@ -23,6 +24,8 @@ export default function SavingsScreen({ navigation }) {
   const future   = calcFuture();
   const invested = (parseFloat(savings) || 0) * (parseInt(years) || 0) * 12;
   const earnings = future - invested;
+        
+  useMessagesLoader("Cargando...");
 
   return (
     <SafeAreaView style={styles.container}>

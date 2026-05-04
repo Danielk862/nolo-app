@@ -173,8 +173,6 @@ RPCs requeridas:
 
 ## 🔧 Próximas mejoras
 
-- [ ] Módulo "Mi Negocio"
-- [ ] Exportar reportes en PDF
 - [ ] Notificaciones de alerta de presupuesto
 - [ ] Modo oscuro
 - [ ] Gráficas históricas por período

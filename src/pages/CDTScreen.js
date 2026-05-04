@@ -7,11 +7,14 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function CDTScreen({ navigation }) {
   const [capital, setCapital] = useState('10000000');
   const [rate, setRate] = useState('12');
   const [months, setMonths] = useState('12');
+
+  useMessagesLoader("Cargando...");
 
   const result = capital && rate && months
     ? Math.round(parseFloat(capital) * (1 + (parseFloat(rate) / 100) * (parseInt(months) / 12)))

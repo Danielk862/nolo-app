@@ -7,10 +7,13 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function EmergencyFundScreen({ navigation }) {
   const [monthlyExpenses, setMonthlyExpenses] = useState('3000000');
   const [months, setMonths]                   = useState('6');
+    
+  useMessagesLoader("Cargando...");
 
   const fund = Math.round((parseFloat(monthlyExpenses) || 0) * (parseInt(months) || 0));
 

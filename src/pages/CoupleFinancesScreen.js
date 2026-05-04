@@ -17,6 +17,7 @@ import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';
 import useFinances from '../hooks/useFinances';
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function CoupleFinancesScreen({ navigation }) {
   const finance = useFinances('couple_finances', {
@@ -24,6 +25,8 @@ export default function CoupleFinancesScreen({ navigation }) {
     expense: COLORS.red,
     balance: COLORS.primaryGreen,
   });
+  
+  useMessagesLoader("Cargando...");
 
   return (
     <SafeAreaView style={styles.container}>

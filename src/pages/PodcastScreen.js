@@ -5,6 +5,7 @@ import NoloLogo from "../components/NoloLogo";
 import styles from "../styles/pages/simulator.styles";
 import LogoutButton from "../components/LogoutButton";
 import { ROUTES } from "../constants/routes";
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function PodcastScreen({ navigation }) {
     const handleYoutube = () => {
@@ -16,6 +17,8 @@ export default function PodcastScreen({ navigation }) {
     const handleApplePodcast = () => {
         Linking.openURL('https://podcasts.apple.com/us/new');
     }
+      
+    useMessagesLoader("Cargando...");
 
     return (
         <SafeAreaView style={styles.container}>

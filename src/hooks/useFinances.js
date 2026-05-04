@@ -4,6 +4,7 @@ import { INCOME_CATEGORIES } from '../constants/incomeCategories';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { COLORS } from '../constants/theme';
 import { supabase } from '../lib/supabase';
+import { useLoader } from '../context/LoadingContext';
 
 const EMPTY_MONTH = { income: {}, expenses: {} };
 
@@ -16,6 +17,7 @@ function getPercentage(val, total) {
 }
 
 export default function useFinances(tableName, summaryColors = {}) {
+  const { showLoader, hideLoader } = useLoader();
   const [activeTab, setActiveTab] = useState('Ingresos');
   const [selectedMonth, setSelectedMonth] = useState('Enero');
   const [selectedYear, setSelectedYear] = useState(2026);
@@ -30,6 +32,7 @@ export default function useFinances(tableName, summaryColors = {}) {
 
   const loadFinances = useCallback(async () => {
     setLoading(true);
+    showLoader();
     setData(prev => {
       const yearData = prev[selectedYear] || {};
       return {
@@ -83,8 +86,9 @@ export default function useFinances(tableName, summaryColors = {}) {
       // ignore load errors silently
     } finally {
       setLoading(false);
+      hideLoader();
     }
-  }, [selectedMonth, selectedYear, tableName]);
+  }, [selectedMonth, selectedYear, tableName, showLoader, hideLoader]);
 
   useEffect(() => {
     loadFinances();

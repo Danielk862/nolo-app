@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   KeyboardAvoidingView, Animated,
-  Platform, ActivityIndicator, Image,
+  Platform, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -12,6 +12,7 @@ import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 import styles from '../styles/pages/LoginScreen.styles';
 import { ROUTES } from '../constants/routes';
+import { useLoader } from '../context/LoadingContext';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
   if (open) {
@@ -38,6 +39,7 @@ function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
 
 export default function LoginScreen({ navigation, route }) {
   const registered = route?.params?.registered ?? false;
+  const { showLoader, hideLoader } = useLoader();
 
   const [username, setUsername]     = useState('');
   const [password, setPassword]     = useState('');
@@ -75,6 +77,7 @@ export default function LoginScreen({ navigation, route }) {
   const handleLogin = async () => {
     if (!validate()) return;
     setLoading(true);
+    showLoader("Iniciando sesión...");
     setErrors({});
     try {
       const { data: email, error: rpcError } = await supabase
@@ -117,6 +120,7 @@ export default function LoginScreen({ navigation, route }) {
       setErrors({ general: `Error de conexión: ${err?.message ?? 'desconocido'}` });
     } finally {
       setLoading(false);
+      hideLoader();
     }
   };
 
@@ -184,10 +188,7 @@ export default function LoginScreen({ navigation, route }) {
           onPress={handleLogin}
           disabled={loading}
         >
-          {loading
-            ? <ActivityIndicator color={COLORS.white} />
-            : <Text style={styles.loginBtnText}>Acceder</Text>
-          }
+          <Text style={styles.loginBtnText}>Acceder</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>

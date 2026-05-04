@@ -16,6 +16,7 @@ import { DOC_TYPES } from '../constants/documentTypes';
 import { ROUTES } from '../constants/routes';
 import { GENDERS } from '../constants/genders';
 import { hashPassword } from '../utils/passwordCrypto';
+import useMessagesLoader from '../hooks/useMessagesLoader';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
   if (open) {
@@ -53,6 +54,8 @@ function Dropdown({ options, value, onSelect, error, placeholder, title, disable
     setSearch('');
     setOpen(true);
   };
+        
+  useMessagesLoader("Cargando...");
 
   return (
     <>
@@ -121,6 +124,7 @@ function Field({ label, required, error, children }) {
 }
 
 export default function RegisterScreen({ navigation }) {
+  const { showLoader, hideLoader } = useLoader();
   const [form, setForm] = useState({
     username: '',
     password: '',
@@ -230,6 +234,7 @@ export default function RegisterScreen({ navigation }) {
       return;
     }
     setLoading(true);
+    showLoader();
     setErrors({});
 
     try {
@@ -304,6 +309,7 @@ export default function RegisterScreen({ navigation }) {
       setErrors({ general: `Error: ${err?.message ?? 'desconocido'}` });
     } finally {
       setLoading(false);
+      hideLoader();
     }
   };
 
@@ -627,10 +633,7 @@ export default function RegisterScreen({ navigation }) {
             onPress={handleRegister}
             disabled={loading}
           >
-            {loading
-              ? <ActivityIndicator color={COLORS.white} />
-              : <Text style={styles.registerBtnText}>Crear cuenta</Text>
-            }
+            <Text style={styles.registerBtnText}>Crear cuenta</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
