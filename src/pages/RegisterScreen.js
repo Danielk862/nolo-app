@@ -11,7 +11,7 @@ import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 import { GeoModel } from '../models';
-import styles, { dropStyles, fieldStyles } from '../styles/screens/RegisterScreen.styles';
+import styles, { dropStyles, fieldStyles } from '../styles/pages/RegisterScreen.styles';
 import { DOC_TYPES } from '../constants/documentTypes';
 import { ROUTES } from '../constants/routes';
 import { GENDERS } from '../constants/genders';

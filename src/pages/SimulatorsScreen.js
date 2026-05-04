@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
-import styles from '../styles/screens/SimulatorsScreen.styles';
+import styles from '../styles/pages/SimulatorsScreen.styles';
 import { ROUTES } from '../constants/routes';
 
 const SIMULATORS = [
@@ -52,7 +52,10 @@ export default function SimulatorsScreen({ navigation }) {
         >
           <Text style={styles.navText}>Inicio</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}>
+        <TouchableOpacity 
+          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+          onPress={() => navigation.navigate(ROUTES.WELCOME)}
+        >
           <Text style={styles.navText}>Cursos y libros</Text>
         </TouchableOpacity>
       </View>

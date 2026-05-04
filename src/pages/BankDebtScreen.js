@@ -4,8 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import { SimInput, ResultRow, simStyles } from '../components/SimulatorComponents';
 import NoloLogo from '../components/NoloLogo';
-import styles from '../styles/screens/simulator.styles';
+import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
+import { ROUTES } from "../constants/routes";
 
 export default function BankDebtScreen({ navigation }) {
   const [debt, setDebt]               = useState('5000000');
@@ -55,6 +56,21 @@ export default function BankDebtScreen({ navigation }) {
           <Text style={styles.byline}>by la Peliroja Financiera</Text>          
         </View>
       </ScrollView>
+      
+      <View style={styles.bottomNav}>
+          <TouchableOpacity
+              style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+              onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
+          >
+              <Text style={styles.navText}>Inicio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+              style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+              onPress={() => navigation.navigate(ROUTES.WELCOME)}
+          >
+              <Text style={styles.navText}>Cursos y libros</Text>
+          </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }

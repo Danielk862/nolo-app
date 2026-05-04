@@ -6,7 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../lib/supabase';
 import { ROUTES } from '../constants/routes';
-import styles from '../styles/screens/OTPScreen.styles';
+import styles from '../styles/pages/OTPScreen.styles';
 
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN = 60;

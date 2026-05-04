@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
-import styles from '../styles/screens/FinancesScreen.styles';
+import styles from '../styles/pages/FinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
 
 const MODULE_CARDS = [
@@ -64,7 +64,7 @@ export default function FinancesScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
+          onPress={() => navigation.navigate(ROUTES.WELCOME)}
         >
           <Text style={styles.navText}>Cursos y libros</Text>
         </TouchableOpacity>

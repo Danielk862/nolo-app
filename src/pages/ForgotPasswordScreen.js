@@ -6,7 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../lib/supabase';
 import { ROUTES } from '../constants/routes';
-import styles from '../styles/screens/ForgotPasswordScreen.styles';
+import styles from '../styles/pages/ForgotPasswordScreen.styles';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [username, setUsername] = useState('');

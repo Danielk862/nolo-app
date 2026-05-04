@@ -10,7 +10,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
-import styles from '../styles/screens/LoginScreen.styles';
+import styles from '../styles/pages/LoginScreen.styles';
 import { ROUTES } from '../constants/routes';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
@@ -130,7 +130,7 @@ export default function LoginScreen({ navigation, route }) {
       <View> 
         <View style={styles.avatar}> 
           <Text style={styles.avatarEmoji}>
-            <Image source={require('../assets/images/cerdito_inicio.png')} />
+            <Image source={require('../../assets/images/cerdito_inicio.png')} />
           </Text> 
         </View> 
       </View>

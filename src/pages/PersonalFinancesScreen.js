@@ -12,7 +12,7 @@ import SummarySection from '../components/finances/SummarySection';
 import EditModal from '../components/finances/EditModal';
 import SuccessModal from '../components/SuccessModal';
 import YearSelector from '../components/finances/YearSelector';
-import styles from '../styles/screens/PersonalFinancesScreen.styles';
+import styles from '../styles/pages/PersonalFinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';

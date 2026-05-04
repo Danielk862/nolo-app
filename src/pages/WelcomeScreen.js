@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
-import styles from '../styles/screens/WelcomeScreen.styles';
+import styles from '../styles/pages/WelcomeScreen.styles';
 
 export default function WelcomeScreen({ navigation }) {
   const handleTutorial = () => {

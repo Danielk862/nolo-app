@@ -8,7 +8,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { supabase } from '../lib/supabase';
 import { ROUTES } from '../constants/routes';
 import { COLORS } from '../constants/theme';
-import styles from '../styles/screens/ChangePasswordScreen.styles';
+import styles from '../styles/pages/ChangePasswordScreen.styles';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGreen }) {
   if (open) {

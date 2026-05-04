@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS, SPACING } from '../../constants/theme';
+import { COLORS, SPACING, RADIUS } from '../../constants/theme';
 
 export default StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.white },
@@ -59,5 +59,25 @@ export default StyleSheet.create({
     fontSize: 6,
     fontWeight: "600",
     textAlign: "center",
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.white,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.lightGray,
+  },
+  navBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: RADIUS.full,
+    alignItems: 'center',
+  },
+  navText: {
+    color: COLORS.white,
+    fontWeight: '600',
+    fontSize: 13,
   },
 });

@@ -2,8 +2,9 @@ import { View, Text, ScrollView, TouchableOpacity, Linking, Image } from "react-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../constants/theme";
 import NoloLogo from "../components/NoloLogo";
-import styles from "../styles/screens/simulator.styles";
+import styles from "../styles/pages/simulator.styles";
 import LogoutButton from "../components/LogoutButton";
+import { ROUTES } from "../constants/routes";
 
 export default function PodcastScreen({ navigation }) {
     const handleYoutube = () => {
@@ -35,7 +36,7 @@ export default function PodcastScreen({ navigation }) {
                 <TouchableOpacity style={styles.youtubeCard} onPress={handleYoutube}>
                     <View style={styles.ytInner}>
                         <Image
-                            source={require("../assets/images/youtube.png")}
+                            source={require("../../assets/images/youtube.png")}
                             style={styles.ytIcon}
                             resizeMode="contain"
                         />
@@ -45,7 +46,7 @@ export default function PodcastScreen({ navigation }) {
                 <TouchableOpacity style={styles.spotifyCard} onPress={handleSpotify}>
                     <View style={styles.ytInner}>
                         <Image
-                            source={require("../assets/images/spotify.png")}
+                            source={require("../../assets/images/spotify.png")}
                             style={styles.ytIcon}
                             resizeMode="contain"
                         />
@@ -55,7 +56,7 @@ export default function PodcastScreen({ navigation }) {
                 <TouchableOpacity style={styles.applePodcastCard} onPress={handleApplePodcast}>
                     <View style={styles.ytInner}>
                         <Image
-                            source={require("../assets/images/applepodcast.png")}
+                            source={require("../../assets/images/applepodcast.png")}
                             style={styles.ytIcon}
                             resizeMode="contain"
                         />
@@ -66,6 +67,21 @@ export default function PodcastScreen({ navigation }) {
                     <Text style={styles.byline}>by la Peliroja Financiera</Text>
                 </View>   
             </ScrollView>
+
+            <View style={styles.bottomNav}>
+                <TouchableOpacity
+                    style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+                    onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
+                >
+                    <Text style={styles.navText}>Inicio</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
+                    onPress={() => navigation.navigate(ROUTES.WELCOME)}
+                >
+                    <Text style={styles.navText}>Cursos y libros</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
