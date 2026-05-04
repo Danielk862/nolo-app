@@ -22,4 +22,42 @@ export default StyleSheet.create({
   content: { padding: SPACING.md, gap: SPACING.md },
   description: { fontSize: 14, color: COLORS.gray, marginBottom: SPACING.xs },
   logoArea: { alignItems: 'center', paddingVertical: SPACING.lg },
+  youtubeCard: {
+    width: 310,
+    height: 110,
+    borderRadius: 16,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  spotifyCard: {
+    width: 310,
+    height: 110,
+    borderRadius: 16,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  applePodcastCard: {
+    width: 310,
+    height: 110,
+    borderRadius: 16,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ytInner: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ytIcon: {
+    width: 900,
+    height: 200,
+    marginBottom: 8,
+  },
+  ytLabel: {
+    fontSize: 6,
+    fontWeight: "600",
+    textAlign: "center",
+  },
 });
