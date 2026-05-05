@@ -124,7 +124,6 @@ function Field({ label, required, error, children }) {
 }
 
 export default function RegisterScreen({ navigation }) {
-  const { showLoader, hideLoader } = useLoader();
   const [form, setForm] = useState({
     username: '',
     password: '',

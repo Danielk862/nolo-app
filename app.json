@@ -24,7 +24,7 @@
     },
     "android": {
       "package": "com.pelirojafinanciera.nolo",
-      "icon":"./assets/icon.png",
+      "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-background.png",
         "backgroundColor": "#C8F090",
@@ -35,7 +35,9 @@
       "favicon": "./assets/icon.png"
     },
     "userInterfaceStyle": "light",
-    "plugins": [],
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ],
     "extra": {
       "eas": {
         "projectId": "39647004-72f0-4616-85d6-335fdd6ae647"
