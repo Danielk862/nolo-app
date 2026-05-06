@@ -12,12 +12,10 @@ import { useLoader } from '../context/LoadingContext';
 export default function WelcomeScreen({ navigation }) {
   const { showLoader, hideLoader } = useLoader();
 
-  const handleTutorial = () => {
-    Linking.openURL('https://www.youtube.com');
-  };
+  const handleTutorial = () => { Linking.openURL('https://www.youtube.com'); };
 
   const handleContinue = () => {
-    showLoader();
+    //showLoader();
     navigation.replace(ROUTES.SIMULATORS);
     setTimeout(hideLoader, 2000);
   };

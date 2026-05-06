@@ -5,20 +5,11 @@ import NoloLogo from "../components/NoloLogo";
 import styles from "../styles/pages/simulator.styles";
 import LogoutButton from "../components/LogoutButton";
 import { ROUTES } from "../constants/routes";
-import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function PodcastScreen({ navigation }) {
-    const handleYoutube = () => {
-        Linking.openURL('https://www.youtube.com');
-    }
-    const handleSpotify = () => {
-        Linking.openURL('https://open.spotify.com/intl-es/');
-    }
-    const handleApplePodcast = () => {
-        Linking.openURL('https://podcasts.apple.com/us/new');
-    }
-      
-    useMessagesLoader("Cargando...");
+    const handleYoutube = () => { Linking.openURL('https://www.youtube.com'); }
+    const handleSpotify = () => { Linking.openURL('https://open.spotify.com/intl-es/'); }
+    const handleApplePodcast = () => { Linking.openURL('https://podcasts.apple.com/us/new');}
 
     return (
         <SafeAreaView style={styles.container}>

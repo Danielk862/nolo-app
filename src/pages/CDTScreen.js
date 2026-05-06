@@ -7,7 +7,6 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
-import useMessagesLoader from '../hooks/useMessagesLoader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Field } from '../components/Field';
 import Checkbox from '../components/Checkbox';
@@ -22,8 +21,6 @@ export default function CDTScreen({ navigation }) {
   const [dateValue, setDateValue] = useState(new Date(2000, 0, 1));
   const [checked, setChecked] = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
-
-  useMessagesLoader("Cargando...");
 
   const handleDate = () => {
     const valueNum = parseInt(days);
@@ -78,7 +75,7 @@ export default function CDTScreen({ navigation }) {
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
       >
         <ScrollView contentContainerStyle={styles.content}>
@@ -138,7 +135,38 @@ export default function CDTScreen({ navigation }) {
               <ResultRow label="Rentabilidad neta E.A." value={`${netProfitability}%`} color={COLORS.darkGreen} />
               <ResultRow label="Total a recibir (COP)" value={`$${result.toLocaleString('es-CO')}`} color={COLORS.dark} total />
             </View>
-          )}  
+          )}
+
+          {result > 0 && parseInt(days) >= 30 && (
+            <View style={{ marginTop: 16, borderRadius: 8, overflow: 'hidden' }}>
+              <View style={{ backgroundColor: '#1a3a5c', padding: 12 }}>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>
+                  📊 Proyección mensual de rendimiento
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row', backgroundColor: '#1a3a5c', paddingVertical: 8, paddingHorizontal: 4, borderTopWidth: 1, borderTopColor: '#2a4a6c' }}>
+                <Text style={{ flex: 1, color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize: 12 }}>Mes</Text>
+                <Text style={{ flex: 2, color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize: 12 }}>Intereses acumulados</Text>
+                <Text style={{ flex: 2, color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize: 12 }}>Capital + Intereses</Text>
+              </View>
+              {Array.from({ length: Math.floor(parseInt(days) / 30) }, (_, i) => {
+                const month = i + 1;
+                const accInterest = Math.round(parseFloat(capital) * (parseFloat(rate) / 100) * (month * 30 / 365));
+                const total = parseFloat(capital) + accInterest;
+                return (
+                  <View key={month} style={{ flexDirection: 'row', backgroundColor: i % 2 === 0 ? '#ffffff' : '#ddeeff', paddingVertical: 8, paddingHorizontal: 4 }}>
+                    <Text style={{ flex: 1, textAlign: 'center', color: '#333', fontSize: 13 }}>Mes {month}</Text>
+                    <Text style={{ flex: 2, textAlign: 'center', color: COLORS.darkGreen, fontWeight: 'bold', fontSize: 13 }}>
+                      ${accInterest.toLocaleString('es-CO')}
+                    </Text>
+                    <Text style={{ flex: 2, textAlign: 'center', color: '#0066cc', fontWeight: 'bold', fontSize: 13 }}>
+                      ${total.toLocaleString('es-CO')}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          )}
 
           <View style={styles.logoArea}>
             <NoloLogo size="sm" color={COLORS.darkGray} />
@@ -146,7 +174,7 @@ export default function CDTScreen({ navigation }) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      
+
       <View style={styles.bottomNav}>
           <TouchableOpacity
               style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}

@@ -7,7 +7,6 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
-import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function PensionPlanScreen({ navigation }) {
   const [age, setAge]       = useState('30');
@@ -16,8 +15,6 @@ export default function PensionPlanScreen({ navigation }) {
   const yearsRemaining = 62 - (parseInt(age) || 30);
   const annualBase     = (parseFloat(salary) || 0) * 12;
   const estimated      = Math.round(annualBase * 0.65 * Math.min(yearsRemaining / 25, 1));
-  
-  useMessagesLoader("Cargando...");
 
   return (
     <SafeAreaView style={styles.container}>

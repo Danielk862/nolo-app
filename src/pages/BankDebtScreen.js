@@ -7,14 +7,11 @@ import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
 import { ROUTES } from "../constants/routes";
-import useMessagesLoader from '../hooks/useMessagesLoader';
 
 export default function BankDebtScreen({ navigation }) {
   const [debt, setDebt]               = useState('5000000');
   const [rate, setRate]               = useState('24');
-  const [installments, setInstallments] = useState('24');
-  
-  useMessagesLoader("Cargando...");
+  const [installments, setInstallments] = useState('24');  
 
   const calcInstallment = () => {
     const r = parseFloat(rate) / 100 / 12;

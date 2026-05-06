@@ -5,7 +5,6 @@ import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/pages/SimulatorsScreen.styles';
 import { ROUTES } from '../constants/routes';
-import useMessagesLoader from '../hooks/useMessagesLoader';
 
 const SIMULATORS = [
   { id: 'finances',  emoji: '💰', label: 'Finanzas',            description: 'Ver Finanzas Personales y en Pareja',         route: ROUTES.FINANCES },
@@ -18,9 +17,7 @@ const SIMULATORS = [
   { id: 'podcast',   emoji: '🎙️', label: 'Podcast',             description: 'Escucha nuestro podcast sobre finanzas',      route: ROUTES.SIMULATOR_PODCAST },
 ];
 
-export default function SimulatorsScreen({ navigation }) {        
-  useMessagesLoader("Cargando... Bienvenido a Nolo");
-
+export default function SimulatorsScreen({ navigation }) { 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
