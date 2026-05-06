@@ -25,13 +25,13 @@ export default function CDTScreen({ navigation }) {
 
   useMessagesLoader("Cargando...");
 
-  const handleDate = async (e) => {
-    const text = e.target.value;
+  const handleDate = () => {
+    const valueNum = parseInt(days);
 
-    if (!(text %30 === 0)) {      
+    if (!valueNum || valueNum % 30 !== 0) {
       setErrorPopupVisible(true);
       setTimeout(() => setErrorPopupVisible(false), 3000);
-      return;
+      setDays('');
     }
   }
   const sumDaysToDate = (dateString, daysToAdd) => {
@@ -88,7 +88,7 @@ export default function CDTScreen({ navigation }) {
 
           <SimInput label="Capital inicial (COP)" value={capital} onChange={setCapital} money />
           <SimInputDecimal label="Tasa EA (%)" value={rate} onChange={setRate} decimal />
-          <SimInput label="Plazo (días)" value={days} onChange={setDays} onBlur={handleDate} money />
+          <SimInput label="Plazo (días)" value={days} onChange={setDays} onEndEditing={handleDate} money />
           <Field label="Fecha de inicio">
             <TouchableOpacity
               style={styles.inputRow}

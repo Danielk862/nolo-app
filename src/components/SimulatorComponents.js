@@ -5,7 +5,7 @@ import { formatMoney } from '../utils/formatMoney';
 
 export { simStyles };
 
-export function SimInput({ label, value, onChange, onBlur, money = false }) {
+export function SimInput({ label, value, onChange, onBlur, onEndEditing, money = false }) {
   const handleChange = (text) => {
     if (money) {
       onChange(text.replace(/[^0-9]/g, ''));
@@ -13,7 +13,7 @@ export function SimInput({ label, value, onChange, onBlur, money = false }) {
       onChange(text);
     }
   };
-  
+
   return (
     <View style={simStyles.inputGroup}>
       <Text style={simStyles.inputLabel}>{label}</Text>
@@ -22,6 +22,7 @@ export function SimInput({ label, value, onChange, onBlur, money = false }) {
         value={money ? formatMoney(value) : value}
         onChangeText={handleChange}
         onBlur={onBlur}
+        onEndEditing={onEndEditing}
         keyboardType="numeric"
         placeholder="0"
         placeholderTextColor={COLORS.gray}
