@@ -19,7 +19,7 @@ export default StyleSheet.create({
     fontSize: 14,
   },
   headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.darkGray },
-  content: { padding: SPACING.md, gap: SPACING.md },
+  content: { padding: SPACING.md, gap: SPACING.md, paddingBottom: 80 },
   description: { fontSize: 14, color: COLORS.gray, marginBottom: SPACING.xs },
   logoArea: { alignItems: 'center', paddingVertical: SPACING.lg },
   youtubeCard: {
@@ -61,6 +61,10 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.md,
