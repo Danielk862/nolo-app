@@ -62,13 +62,6 @@ export const dropStyles = StyleSheet.create({
   check: { color: COLORS.darkGreen, fontSize: 16, fontWeight: '700' },
 });
 
-export const fieldStyles = StyleSheet.create({
-  block: { gap: 4 },
-  label: { fontSize: 13, fontWeight: '600', color: COLORS.darkGray, marginLeft: 4 },
-  req: { color: COLORS.red },
-  error: { color: COLORS.red, fontSize: 12, marginLeft: 4 },
-});
-
 export default StyleSheet.create({
   container: {
     flex: 1,

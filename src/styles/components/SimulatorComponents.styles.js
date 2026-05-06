@@ -28,5 +28,6 @@ export default StyleSheet.create({
   },
   resultLabel: { fontSize: 14, color: COLORS.darkGray },
   resultValue: { fontSize: 15, fontWeight: '700' },
+  total: { fontSize: 17, fontWeight: '900', color: COLORS.dark },
   tip: { fontSize: 12, color: COLORS.gray, fontStyle: 'italic', marginTop: 4 },
 });

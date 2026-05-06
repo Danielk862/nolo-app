@@ -11,12 +11,13 @@ import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
 import { supabase } from '../lib/supabase';
 import { GeoModel } from '../models';
-import styles, { dropStyles, fieldStyles } from '../styles/pages/RegisterScreen.styles';
+import styles, { dropStyles } from '../styles/pages/RegisterScreen.styles';
 import { DOC_TYPES } from '../constants/documentTypes';
 import { ROUTES } from '../constants/routes';
 import { GENDERS } from '../constants/genders';
 import { hashPassword } from '../utils/passwordCrypto';
 import useMessagesLoader from '../hooks/useMessagesLoader';
+import { Field } from '../components/Field';
 
 function EyeIcon({ open, size = 20, color = COLORS.darkGray }) {
   if (open) {
@@ -107,19 +108,6 @@ function Dropdown({ options, value, onSelect, error, placeholder, title, disable
         </TouchableOpacity>
       </Modal>
     </>
-  );
-}
-
-function Field({ label, required, error, children }) {
-  return (
-    <View style={fieldStyles.block}>
-      <Text style={fieldStyles.label}>
-        {label}
-        {required && <Text style={fieldStyles.req}> *</Text>}
-      </Text>
-      {children}
-      {error && <Text style={fieldStyles.error}>{error}</Text>}
-    </View>
   );
 }
 
