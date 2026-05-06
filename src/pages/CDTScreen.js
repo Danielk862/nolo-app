@@ -10,6 +10,7 @@ import { ROUTES } from "../constants/routes";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Field } from '../components/Field';
 import Checkbox from '../components/Checkbox';
+import BottomNav from '../components/BottomNav';
 
 export default function CDTScreen({ navigation }) {
   const [capital, setCapital] = useState('');
@@ -175,20 +176,11 @@ export default function CDTScreen({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <View style={styles.bottomNav}>
-          <TouchableOpacity
-              style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-              onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
-          >
-              <Text style={styles.navText}>Inicio</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-              style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-              onPress={() => navigation.navigate(ROUTES.WELCOME)}
-          >
-              <Text style={styles.navText}>Cursos y libros</Text>
-          </TouchableOpacity>
-      </View>
+      <BottomNav
+        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
+        accentColor={COLORS.darkGreen}
+      />
 
       <Modal visible={errorPopupVisible} transparent animationType="fade">
         <View style={styles.popupOverlay}>

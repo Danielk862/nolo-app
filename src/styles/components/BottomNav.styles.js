@@ -2,7 +2,11 @@ import { StyleSheet } from 'react-native';
 import { COLORS, SPACING, RADIUS } from '../../constants/theme';
 
 export default StyleSheet.create({
-  container: {
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.md,
@@ -11,14 +15,13 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGray,
   },
-  btn: {
+  navBtn: {
     flex: 1,
     paddingVertical: 10,
     borderRadius: RADIUS.full,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  btnText: {
+  navText: {
     color: COLORS.white,
     fontWeight: '600',
     fontSize: 13,

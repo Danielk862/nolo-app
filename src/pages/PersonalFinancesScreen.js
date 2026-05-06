@@ -123,7 +123,8 @@ export default function PersonalFinancesScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate(ROUTES.SIMULATORS)}
+        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
         accentColor={COLORS.darkGreen}
       />
 

@@ -5,6 +5,7 @@ import NoloLogo from "../components/NoloLogo";
 import styles from "../styles/pages/simulator.styles";
 import LogoutButton from "../components/LogoutButton";
 import { ROUTES } from "../constants/routes";
+import BottomNav from "../components/BottomNav";
 
 export default function PodcastScreen({ navigation }) {
     const handleYoutube = () => { Linking.openURL('https://www.youtube.com'); }
@@ -62,20 +63,11 @@ export default function PodcastScreen({ navigation }) {
                 </View>   
             </ScrollView>
 
-            <View style={styles.bottomNav}>
-                <TouchableOpacity
-                    style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-                    onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
-                >
-                    <Text style={styles.navText}>Inicio</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-                    onPress={() => navigation.navigate(ROUTES.WELCOME)}
-                >
-                    <Text style={styles.navText}>Cursos y libros</Text>
-                </TouchableOpacity>
-            </View>
+            <BottomNav
+                onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+                onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
+                accentColor={COLORS.darkGreen}
+            />
         </SafeAreaView>
     )
 }

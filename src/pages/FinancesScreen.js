@@ -6,6 +6,7 @@ import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/pages/FinancesScreen.styles';
 import { ROUTES } from '../constants/routes';
 import useMessagesLoader from '../hooks/useMessagesLoader';
+import BottomNav from '../components/BottomNav';
 
 const MODULE_CARDS = [
   {
@@ -58,20 +59,11 @@ export default function FinancesScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
-        >
-          <Text style={styles.navText}>Inicio</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.WELCOME)}
-        >
-          <Text style={styles.navText}>Cursos y libros</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNav
+        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
+        accentColor={COLORS.darkGreen}
+      />
     </SafeAreaView>
   );
 }

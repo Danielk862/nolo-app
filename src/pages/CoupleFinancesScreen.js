@@ -127,7 +127,8 @@ export default function CoupleFinancesScreen({ navigation }) {
       </ScrollView>
 
       <BottomNav
-        onInicio={() => navigation.navigate(ROUTES.SIMULATORS)}
+        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
         accentColor={COLORS.primaryYellow}
       />
 

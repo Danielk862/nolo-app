@@ -5,6 +5,7 @@ import NoloLogo from '../components/NoloLogo';
 import LogoutButton from '../components/LogoutButton';
 import styles from '../styles/pages/SimulatorsScreen.styles';
 import { ROUTES } from '../constants/routes';
+import BottomNav from '../components/BottomNav';
 
 const SIMULATORS = [
   { id: 'finances',  emoji: '💰', label: 'Finanzas',            description: 'Ver Finanzas Personales y en Pareja',         route: ROUTES.FINANCES },
@@ -43,20 +44,11 @@ export default function SimulatorsScreen({ navigation }) {
         ))}
       </ScrollView>
 
-      <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULATORS)}
-        >
-          <Text style={styles.navText}>Inicio</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navBtn, { backgroundColor: COLORS.darkGreen }]}
-          onPress={() => navigation.navigate(ROUTES.WELCOME)}
-        >
-          <Text style={styles.navText}>Cursos y libros</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomNav
+        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
+        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
+        accentColor={COLORS.darkGreen}
+      />
     </SafeAreaView>
   );
 }
