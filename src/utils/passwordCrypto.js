@@ -30,4 +30,3 @@ export async function hashPassword(plainPassword) {
 export async function comparePassword(plainPassword, hashedPassword) {
   return bcrypt.compare(plainPassword, hashedPassword);
 }
-

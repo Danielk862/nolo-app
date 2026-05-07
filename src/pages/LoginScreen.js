@@ -210,4 +210,3 @@ export default function LoginScreen({ navigation, route }) {
     </SafeAreaView>
   );
 }
-

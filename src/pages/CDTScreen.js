@@ -190,4 +190,3 @@ export default function CDTScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
