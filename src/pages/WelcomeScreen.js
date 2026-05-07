@@ -28,7 +28,7 @@ export default function WelcomeScreen({ navigation }) {
       <View style={styles.inner}>
         <Text style={styles.welcome}>Bienvenid@ a</Text>
 
-        <NoloLogo size="lg" color={COLORS.darkGray} />
+        <NoloLogo size="lg" />
 
         <TouchableOpacity style={styles.youtubeCard} onPress={handleTutorial}>
           <View style={styles.ytInner}>

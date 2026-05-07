@@ -13,7 +13,6 @@ import EditModal from '../components/finances/EditModal';
 import SuccessModal from '../components/SuccessModal';
 import YearSelector from '../components/finances/YearSelector';
 import styles from '../styles/pages/CoupleFinancesScreen.styles';
-import { ROUTES } from '../constants/routes';
 import { EXPENSE_CATEGORIES } from '../constants/expenseCategories';
 import { INCOME_CATEGORIES } from '../constants/incomeCategories';
 import useFinances from '../hooks/useFinances';
@@ -118,18 +117,13 @@ export default function CoupleFinancesScreen({ navigation }) {
           selectedYear={finance.selectedYear}
           setSelectedYear={finance.setSelectedYear}
           accentColor={COLORS.darkYellow}
-        />
-
-        <View style={styles.logoArea}>
-          <NoloLogo size="sm" color={COLORS.darkGray} />
-          <Text style={styles.byline}>by la Peliroja Financiera</Text>
-        </View>
+        />        
+        <NoloLogo size="sm" />  
       </ScrollView>
 
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.primaryYellow}
+        navigation={navigation}
+        accentColor
       />
 
       <EditModal

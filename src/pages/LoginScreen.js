@@ -205,9 +205,7 @@ export default function LoginScreen({ navigation, route }) {
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.logoContainer}>
-          <NoloLogo size="md" color={COLORS.darkGray} />
-        </View>
+        <NoloLogo />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

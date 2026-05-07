@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import NoloLogo from '../components/NoloLogo';
@@ -22,32 +22,34 @@ export default function SimulatorsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <NoloLogo size="md" color={COLORS.darkGreen} />
+        <NoloLogo size="sm" />
         <Text style={styles.simMenu}>Menú</Text>
         <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
       </View>
 
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        {SIMULATORS.map(sim => (
-          <TouchableOpacity
-            key={sim.id}
-            style={styles.simCard}
-            onPress={() => navigation.navigate(sim.route)}
-          >
-            <Text style={styles.simEmoji}>{sim.emoji}</Text>
-            <View style={styles.simInfo}>
-              <Text style={styles.simLabel}>{sim.label}</Text>
-              <Text style={styles.simDesc}>{sim.description}</Text>
-            </View>
-            <Text style={styles.arrow}>›</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
+        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+          {SIMULATORS.map(sim => (
+            <TouchableOpacity
+              key={sim.id}
+              style={styles.simCard}
+              onPress={() => navigation.navigate(sim.route)}
+            >
+              <Text style={styles.simEmoji}>{sim.emoji}</Text>
+              <View style={styles.simInfo}>
+                <Text style={styles.simLabel}>{sim.label}</Text>
+                <Text style={styles.simDesc}>{sim.description}</Text>
+              </View>
+              <Text style={styles.arrow}>›</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </KeyboardAvoidingView>
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.darkGreen}
+        navigation={navigation}
       />
     </SafeAreaView>
   );

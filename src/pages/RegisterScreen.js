@@ -341,12 +341,8 @@ export default function RegisterScreen({ navigation }) {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.header}>
-            <NoloLogo size="sm" color={COLORS.darkGray} />
-            <Text style={styles.title}>Crear cuenta</Text>
-            <Text style={styles.subtitle}>Ingresa tus datos para comenzar</Text>
-          </View>
+        >          
+          <NoloLogo size="sm" />
 
           {/* ── SECCIÓN: Datos de acceso ── */}
           <View style={styles.section}>

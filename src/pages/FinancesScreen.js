@@ -52,17 +52,11 @@ export default function FinancesScreen({ navigation }) {
             <Text style={[styles.label, { color: card.accent }]}>{card.label}</Text>
           </TouchableOpacity>
         ))}
-
-        <View style={styles.logoContainer}>
-          <NoloLogo size="md" color={COLORS.darkGray} />
-          <Text style={styles.byline}>by la Peliroja Financiera</Text>
-        </View>
+        <NoloLogo />  
       </ScrollView>
 
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.darkGreen}
+        navigation={navigation}
       />
     </SafeAreaView>
   );

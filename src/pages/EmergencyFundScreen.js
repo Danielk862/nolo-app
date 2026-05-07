@@ -6,7 +6,6 @@ import { SimInput, ResultRow, simStyles } from '../components/SimulatorComponent
 import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
-import { ROUTES } from "../constants/routes";
 import BottomNav from '../components/BottomNav';
 
 export default function EmergencyFundScreen({ navigation }) {
@@ -40,16 +39,11 @@ export default function EmergencyFundScreen({ navigation }) {
             <Text style={simStyles.tip}>💡 Recomendado: 3-6 meses de gastos</Text>
           </View>
         )}
-        <View style={styles.logoArea}>
-          <NoloLogo size="sm" color={COLORS.darkGray} />
-          <Text style={styles.byline}>by la Peliroja Financiera</Text>
-        </View>
+          <NoloLogo size="sm" />
       </ScrollView>
       
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.darkGreen}
+        navigation={navigation}
       />
     </SafeAreaView>
   );

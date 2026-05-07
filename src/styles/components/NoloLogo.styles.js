@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../../constants/theme';
+import { COLORS, SPACING } from '../../constants/theme';
 
 export default StyleSheet.create({
   container: {
@@ -18,5 +18,13 @@ export default StyleSheet.create({
   text: {
     fontWeight: '600',
     letterSpacing: 1,
+  },
+  logoArea: { 
+    alignItems: 'center', 
+    paddingVertical: SPACING.lg 
+  },
+  byline: {
+    color: COLORS.gray,
+    fontSize: 14,
   },
 });

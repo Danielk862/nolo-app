@@ -3,14 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity, Platform, KeyboardAvoidingVie
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/theme';
 import { SimInput, ResultRow, simStyles, SimInputDecimal } from '../components/SimulatorComponents';
-import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
-import { ROUTES } from "../constants/routes";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Field } from '../components/Field';
 import Checkbox from '../components/Checkbox';
 import BottomNav from '../components/BottomNav';
+import NoloLogo from '../components/NoloLogo';
 
 export default function CDTScreen({ navigation }) {
   const [capital, setCapital] = useState('');
@@ -168,18 +167,12 @@ export default function CDTScreen({ navigation }) {
               })}
             </View>
           )}
-
-          <View style={styles.logoArea}>
-            <NoloLogo size="sm" color={COLORS.darkGray} />
-            <Text style={styles.byline}>by la Peliroja Financiera</Text>
-          </View>
+          <NoloLogo size="sm" />
         </ScrollView>
       </KeyboardAvoidingView>
 
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.darkGreen}
+        navigation={navigation}
       />
 
       <Modal visible={errorPopupVisible} transparent animationType="fade">

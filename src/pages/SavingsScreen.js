@@ -6,7 +6,6 @@ import { SimInput, ResultRow, simStyles } from '../components/SimulatorComponent
 import NoloLogo from '../components/NoloLogo';
 import styles from '../styles/pages/simulator.styles';
 import LogoutButton from '../components/LogoutButton';
-import { ROUTES } from "../constants/routes";
 import BottomNav from '../components/BottomNav';
 
 export default function SavingsScreen({ navigation }) {
@@ -51,17 +50,12 @@ export default function SavingsScreen({ navigation }) {
             <ResultRow label="Total invertido" value={`$${invested.toLocaleString('es-CO')}`} color={COLORS.gray} />
             <ResultRow label="Rendimiento"     value={`+$${earnings.toLocaleString('es-CO')}`} color={COLORS.chartGreen2} />
           </View>
-        )}
-        <View style={styles.logoArea}>
-          <NoloLogo size="sm" color={COLORS.darkGray} />
-          <Text style={styles.byline}>by la Peliroja Financiera</Text>
-        </View>
+        )}        
+        <NoloLogo size="sm" />
       </ScrollView>
       
       <BottomNav
-        onSimulators={() => navigation.navigate(ROUTES.SIMULATORS)}        
-        onWelcome={() => navigation.navigate(ROUTES.WELCOME)}
-        accentColor={COLORS.darkGreen}
+        navigation={navigation}
       />
     </SafeAreaView>
   );
