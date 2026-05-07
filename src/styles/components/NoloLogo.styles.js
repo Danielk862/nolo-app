@@ -25,6 +25,5 @@ export default StyleSheet.create({
   },
   byline: {
     color: COLORS.gray,
-    fontSize: 14,
   },
 });

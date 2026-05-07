@@ -22,7 +22,7 @@ export default function SimulatorsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <NoloLogo size="sm" />
+        <NoloLogo size="xs" simulator />
         <Text style={styles.simMenu}>Menú</Text>
         <LogoutButton navigation={navigation} color={COLORS.darkGray} size={24} />
       </View>
@@ -30,7 +30,8 @@ export default function SimulatorsScreen({ navigation }) {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+      >
         <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
           {SIMULATORS.map(sim => (
             <TouchableOpacity

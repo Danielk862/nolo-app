@@ -13,7 +13,7 @@ export default StyleSheet.create({
     borderBottomColor: COLORS.lightGray,
   },
   scroll: { flex: 1 },
-  scrollContent: { padding: SPACING.md, gap: SPACING.md },
+  scrollContent: { padding: SPACING.md, gap: SPACING.md, paddingBottom: 80 },
   simCard: {
     flexDirection: 'row',
     alignItems: 'center',
