@@ -105,7 +105,7 @@ export default function CDTScreen({ navigation }) {
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                 maximumDate={new Date(2100, 0, 1)}
                 minimumDate={new Date()}
-                onChange={(_, selected) => {
+                onValueChange={(_, selected) => {
                   setShowDatePicker(Platform.OS === 'ios');
                   if (selected) {
                     setDateValue(selected);
@@ -117,6 +117,7 @@ export default function CDTScreen({ navigation }) {
                     setSelectedDate(`${d}/${m}/${y}`);
                   }
                 }}
+                onDismiss={() => setShowDatePicker(false)}
               />
             )}
           </Field>
