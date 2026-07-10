@@ -12,14 +12,14 @@ import BottomNav from '../components/BottomNav';
 import NoloLogo from '../components/NoloLogo';
 
 export default function CDTScreen({ navigation }) {
-  const [capital, setCapital] = useState('');
-  const [rate, setRate] = useState('');
-  const [days, setDays] = useState('');
-  const [percentage, setPercentage] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [dateValue, setDateValue] = useState(new Date(2000, 0, 1));
-  const [checked, setChecked] = useState(false);
+  const [capital, setCapital]                     = useState('');
+  const [rate, setRate]                           = useState('');
+  const [days, setDays]                           = useState('');
+  const [percentage, setPercentage]               = useState('');
+  const [selectedDate, setSelectedDate]           = useState('');
+  const [showDatePicker, setShowDatePicker]       = useState(false);
+  const [dateValue, setDateValue]                 = useState(new Date(2000, 0, 1));
+  const [checked, setChecked]                     = useState(false);
   const [errorPopupVisible, setErrorPopupVisible] = useState(false);
 
   const handleDate = () => {
@@ -55,10 +55,10 @@ export default function CDTScreen({ navigation }) {
   };
   const formatted = formatDate(expirationDate);
   const dailyPercent  = (((1 + (parseFloat(rate) / 100)) ** (1 / 365) - 1) * 100).toFixed(4);
-  const grossInterest = Math.round(parseFloat(capital) * (1 + (parseFloat(rate) / 100) * (parseInt(days) / 365))) - (parseFloat(capital) || 0);
+  const grossInterest = Math.round(((((1 + (parseFloat(rate) / 100)) ** (parseInt(days) / 365)) - 1)) * parseFloat(capital) || 0);
   const withholdingTax = -grossInterest * (parseFloat(percentage) / 100);
-  const gmf = checked ? -(parseInt(capital) + parseInt(grossInterest)) * 0.004 : 0;
-  const netInterest = grossInterest + withholdingTax + gmf;
+  const gmf = checked ? -((parseInt(capital) + parseInt(grossInterest)) * 0.004).toFixed(0) : 0;
+  const netInterest = (grossInterest + withholdingTax + gmf).toFixed(0);
   const netProfitability = (netInterest / parseFloat(capital) * (365 / parseInt(days)) * 100).toFixed(2);
   const result = parseInt(capital) + parseInt(netInterest) 
 
@@ -152,7 +152,13 @@ export default function CDTScreen({ navigation }) {
               </View>
               {Array.from({ length: Math.floor(parseInt(days) / 30) }, (_, i) => {
                 const month = i + 1;
-                const accInterest = Math.round(parseFloat(capital) * (parseFloat(rate) / 100) * (month * 30 / 365));
+                const interestRate = parseFloat(rate) / 100;
+                const days = (month * 30) / 365;
+                const principal = parseFloat(capital);
+
+                const accInterest = Math.round(
+                  ((1 + interestRate) ** days - 1) * principal
+                );
                 const total = parseFloat(capital) + accInterest;
                 return (
                   <View key={month} style={{ flexDirection: 'row', backgroundColor: i % 2 === 0 ? '#ffffff' : '#ddeeff', paddingVertical: 8, paddingHorizontal: 4 }}>

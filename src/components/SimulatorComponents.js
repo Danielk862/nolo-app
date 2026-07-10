@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { COLORS } from '../constants/theme';
 import simStyles from '../styles/components/SimulatorComponents.styles';
 import { formatMoney } from '../utils/formatMoney';
@@ -64,6 +64,38 @@ export function SimInputDecimal({ label, value, onChange, decimal = false }) {
         placeholder="0.00"
         placeholderTextColor={COLORS.gray}
       />
+    </View>
+  );
+}
+
+export function SimSelect({ label, value, onChange, options }) {
+  return (
+    <View style={simStyles.inputGroup}>
+      <Text style={simStyles.inputLabel}>{label}</Text>
+      <View style={{ flexDirection: 'row', borderRadius: 6, borderWidth: 1.5, borderColor: COLORS.primaryGreen, overflow: 'hidden' }}>
+        {options.map((opt, i) => {
+          const active = opt === value;
+          return (
+            <TouchableOpacity
+              key={opt}
+              style={{
+                flex: 1,
+                paddingVertical: 10,
+                alignItems: 'center',
+                backgroundColor: active ? COLORS.primaryGreen : COLORS.offWhite,
+                borderLeftWidth: i > 0 ? 1 : 0,
+                borderLeftColor: COLORS.primaryGreen,
+              }}
+              onPress={() => onChange(opt)}
+              activeOpacity={0.7}
+            >
+              <Text style={{ fontSize: 14, fontWeight: '600', color: active ? COLORS.white : COLORS.darkGray }}>
+                {opt}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 }

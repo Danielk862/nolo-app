@@ -17,7 +17,7 @@
     "@supabase/supabase-js": "^2.104.1",
     "babel-preset-expo": "~56.0.0",
     "bcryptjs": "^3.0.3",
-    "expo": "^56.0.4",
+    "expo": "~56.0.15",
     "expo-secure-store": "~56.0.4",
     "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
