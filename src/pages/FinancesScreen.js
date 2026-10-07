@@ -45,7 +45,7 @@ export default function FinancesScreen({ navigation }) {
           <TouchableOpacity
             key={card.id}
             style={[styles.card, { backgroundColor: card.bg, borderColor: card.accent }]}
-            onPress={() => navigation.navigate(card.route)}
+            onPress={() => navigation.navigate(card.route, undefined, { pop: true })}
             activeOpacity={0.85}
           >
             <Text style={styles.emoji}>{card.emoji}</Text>

@@ -115,7 +115,7 @@ export default function LoginScreen({ navigation, route }) {
         return;
       }
 
-      navigation.replace('Welcome');
+      navigation.replace(ROUTES.WELCOME);
     } catch (err) {
       setErrors({ general: `Error de conexión: ${err?.message ?? 'desconocido'}` });
     } finally {

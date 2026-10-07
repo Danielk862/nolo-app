@@ -289,7 +289,7 @@ export default function RegisterScreen({ navigation }) {
       setSuccessPopupVisible(true);
       setTimeout(() => {
         setSuccessPopupVisible(false);
-        navigation.navigate(ROUTES.LOGIN, { registered: true });
+        navigation.navigate(ROUTES.LOGIN, { registered: true }, { pop: true });
       }, 3000);
     } catch (err) {
       console.error('[Register Error]', err);
@@ -621,7 +621,7 @@ export default function RegisterScreen({ navigation }) {
 
           <TouchableOpacity
             style={styles.loginLink}
-            onPress={() => navigation.navigate(ROUTES.LOGIN)}
+            onPress={() => navigation.navigate(ROUTES.LOGIN, undefined, { pop: true })}
           >
             <Text style={styles.loginLinkText}>
               ¿Ya tienes cuenta?{' '}

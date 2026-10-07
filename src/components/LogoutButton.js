@@ -4,6 +4,7 @@ import Svg, { Path } from 'react-native-svg';
 import { supabase } from '../lib/supabase';
 import styles from '../styles/components/LogoutButton.styles';
 import { useLoader } from '../context/LoadingContext';
+import { ROUTES } from '../constants/routes';
 
 export default function LogoutButton({ navigation, color = '#555555', size = 24, style }) {
   const { showLoader, hideLoader } = useLoader();
@@ -16,7 +17,7 @@ export default function LogoutButton({ navigation, color = '#555555', size = 24,
     showLoader("Cerrando sesión...");
     await supabase.auth.signOut();
     hideLoader();
-    navigation.replace('Login');
+    navigation.reset({ index: 0, routes: [{ name: ROUTES.LOGIN }] });
   };
 
   return (

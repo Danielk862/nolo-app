@@ -37,7 +37,7 @@ export default function SimulatorsScreen({ navigation }) {
             <TouchableOpacity
               key={sim.id}
               style={styles.simCard}
-              onPress={() => navigation.navigate(sim.route)}
+              onPress={() => navigation.navigate(sim.route, undefined, { pop: true })}
             >
               <Text style={styles.simEmoji}>{sim.emoji}</Text>
               <View style={styles.simInfo}>

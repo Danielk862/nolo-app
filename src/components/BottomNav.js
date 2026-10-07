@@ -11,13 +11,13 @@ export default function BottomNav({ navigation, accentColor = false }) {
     <View View style={styles.bottomNav}>
       <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: color }]}
-          onPress={() => navigation.navigate(ROUTES.SIMULATORS)} 
+          onPress={() => navigation.navigate(ROUTES.SIMULATORS, undefined, { pop: true })} 
       >
           <Text style={styles.navText}>Inicio</Text>
       </TouchableOpacity>
       <TouchableOpacity
           style={[styles.navBtn, { backgroundColor: color }]}
-          onPress={() => navigation.navigate(ROUTES.WELCOME)} 
+          onPress={() => navigation.navigate(ROUTES.WELCOME, undefined, { pop: true })} 
       >
           <Text style={styles.navText}>Cursos y libros</Text>
       </TouchableOpacity>
